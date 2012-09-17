@@ -14,8 +14,8 @@ class SymbolDownloader:
 		self.totalItems = 0
 	
 	def fetchHtml(self):
-		request = Request("http://finance.yahoo.com/lookup/"+self.type+
-							"?s="+self.nextq+"&t=S&m=ALL&r=&b="+str(self.items))
+		request = Request("http://finance.yahoo.com/lookup/"+
+							"?s="+self.nextq+"&t="+self.type[0]+"&m=ALL&r=&b="+str(self.items))
 		request.add_header("User-Agent", "Yahoo-ticker-symbol-downloader/0")
 		response = urlopen(request)
 		return response.read().decode('utf-8')

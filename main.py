@@ -21,7 +21,7 @@ options = {
 	"future":FutureDownloader(),
 	"index":IndexDownloader(),
 	"mutualfund":MutualFundDownloader(),
-	"currency":CurrenyDownloader(),
+	"currency":CurrencyDownloader(),
 }
 
 def loadDownloader():
