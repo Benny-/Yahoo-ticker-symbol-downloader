@@ -11,9 +11,18 @@ from yahoofinance.downloader.ETFDownloader import ETFDownloader
 from yahoofinance.downloader.FutureDownloader import FutureDownloader
 from yahoofinance.downloader.IndexDownloader import IndexDownloader
 from yahoofinance.downloader.MutualFundDownloader import MutualFundDownloader
-from yahoofinance.downloader.CurrenyDownloader import CurrenyDownloader
+from yahoofinance.downloader.CurrencyDownloader import CurrencyDownloader
 
 sys.setrecursionlimit(10000) # Do not remove this line. It contains magic.
+
+options = {
+	"stocks":StockDownloader(),
+	"etf":ETFDownloader(),
+	"future":FutureDownloader(),
+	"index":IndexDownloader(),
+	"mutualfund":MutualFundDownloader(),
+	"currency":CurrenyDownloader(),
+}
 
 def loadDownloader():
 	with open("downloader.pickle", "rb") as file:
@@ -33,14 +42,15 @@ def main():
 		print("Downloader found on disk, resuming")
 	except:
 		print("No old downloader found on disk")
-		
-#		downloader = StockDownloader()
-#		downloader = ETFDownloader()
-#		downloader = FutureDownloader()
-		downloader = IndexDownloader()
-#		downloader = MutualFundDownloader()
-#		downloader = CurrenyDownloader()
-	
+		if(len(sys.argv) <= 1):
+			print("First argument must be the symbol type to download")
+			print("Options are:")
+			for key in options.keys():
+				print(key)
+			exit(1)
+		else:
+			downloader = options[sys.argv[1]]
+
 	try:
 		if not downloader.isDone():
 			print("Downloading " + downloader.type)

@@ -1,9 +1,9 @@
 from yahoofinance.SymbolDownloader import SymbolDownloader
 from yahoofinance.symbols.Curreny import Curreny
 
-class CurrenyDownloader(SymbolDownloader):
+class CurrencyDownloader(SymbolDownloader):
 	def __init__(self):
-		SymbolDownloader.__init__(self, "Curreny")
+		SymbolDownloader.__init__(self, "Currency")
 	
 	def decodeSymbolsContainer(self, symbolsContainer):
 		symbols = []
