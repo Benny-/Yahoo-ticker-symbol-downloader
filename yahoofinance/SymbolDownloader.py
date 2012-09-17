@@ -1,4 +1,4 @@
-import urllib.request
+from urllib.request import Request, urlopen
 import string
 
 from bs4 import BeautifulSoup
@@ -14,9 +14,11 @@ class SymbolDownloader:
 		self.totalItems = 0
 	
 	def fetchHtml(self):
-		request = urllib.request.urlopen("http://finance.yahoo.com/lookup/"+self.type+
-											"?s="+self.nextq+"&t=S&m=ALL&r=&b="+str(self.items))
-		return request.read().decode('utf-8')
+		request = Request("http://finance.yahoo.com/lookup/"+self.type+
+							"?s="+self.nextq+"&t=S&m=ALL&r=&b="+str(self.items))
+		request.add_header("User-Agent", "Yahoo-ticker-symbol-downloader/0")
+		response = urlopen(request)
+		return response.read().decode('utf-8')
 		
 	def makeSoup(self, html):
 		return BeautifulSoup(html) # Screw Imacros! Long live BeautifulSoup~
