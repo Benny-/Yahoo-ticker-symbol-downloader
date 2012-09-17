@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+
+import sys
+import pickle
+import csv
+from pprint import pprint
+from time import sleep
+
+from yahoofinance.downloader.StockDownloader import StockDownloader
+from yahoofinance.downloader.ETFDownloader import ETFDownloader
+from yahoofinance.downloader.FutureDownloader import FutureDownloader
+from yahoofinance.downloader.IndexDownloader import IndexDownloader
+from yahoofinance.downloader.MutualFundDownloader import MutualFundDownloader
+from yahoofinance.downloader.CurrenyDownloader import CurrenyDownloader
+
+sys.setrecursionlimit(10000) # Do not remove this line. It contains magic.
+
+def loadDownloader():
+	with open("downloader.pickle", "rb") as file:
+		return pickle.load(file);
+
+def saveDownloader(downloader):
+	with open("downloader.pickle","wb") as file:
+		pickle.dump(downloader, file=file)
+
+def main():
+	
+	downloader = None
+
+	print("Checking if we can resume a old download session")
+	try:
+		downloader = loadDownloader();
+		print("Downloader found on disk, resuming")
+	except:
+		print("No old downloader found on disk")
+		
+#		downloader = StockDownloader()
+#		downloader = ETFDownloader()
+#		downloader = FutureDownloader()
+		downloader = IndexDownloader()
+#		downloader = MutualFundDownloader()
+#		downloader = CurrenyDownloader()
+	
+	try:
+		if not downloader.isDone():
+			print("Downloading " + downloader.type)
+			symbols = downloader.fetchNextSymbols()
+			lastSaveQuery = downloader.getQuery()
+			while not downloader.isDone():
+				print("Progress-- " +
+						" Queries: " + str(downloader.getQueryNr()) + "/" + str(downloader.getTotalQueries()) +
+						" Items in query: " + str(downloader.getItems()) + "/" + str(downloader.getTotalItems()) +
+						" collected " + downloader.type + " data: " + str(downloader.getCollectedSymbolsSize())
+						)
+				symbols = downloader.fetchNextSymbols()
+				print("Got " + str(len(symbols)) + " downloaded symbols")
+				if(len(symbols)>2):
+					print (str(symbols[0]))
+					print (str(symbols[1]))
+					print ("..ect")
+					print ("")
+			
+				if downloader.getQuery() != lastSaveQuery:
+					lastSaveQuery = downloader.getQuery()
+					print ("Saving downloader to disk...")
+					saveDownloader(downloader)
+				else:
+					sleep(5) # We dont wish to overload the server.
+	except Exception as ex:
+		print("A exception occured while downloading. Suspending downloader to disk")
+		print("Remove downloader.pickle if this error persists")
+		saveDownloader(downloader)
+		raise ex
+	except KeyboardInterrupt as ex:
+		print("Suspending downloader to disk")
+		saveDownloader(downloader)
+	
+	if downloader.isDone():
+		print("Exporting "+downloader.type+" symbols")
+		with open(downloader.type+'.csv', 'w', newline='') as csvfile:
+			csvwriter = csv.writer(csvfile)
+			csvwriter.writerow(downloader.getRowHeader())
+			for symbol in downloader.getCollectedSymbols():
+				csvwriter.writerow(symbol.getRow())
+
+if __name__ == "__main__":
+    main()
