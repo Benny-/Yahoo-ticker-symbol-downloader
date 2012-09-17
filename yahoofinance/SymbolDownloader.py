@@ -55,26 +55,32 @@ class SymbolDownloader:
 	def getTotalItems(self):
 		return self.totalItems
 	
+	def nextQuery(self):
+		if self.getQueryNr()+1 >= len(string.ascii_lowercase):
+			self.items = 0
+			self.nextq = string.ascii_lowercase[0]
+		else:
+			self.nextq = string.ascii_lowercase[self.getQueryNr()+1]
+			self.items = 0
+			self.totalItems = -1
+
 	def fetchNextSymbols(self):
 		html = self.fetchHtml()
 		soup = self.makeSoup(html)
 		try:
 			symbolsContainer = self.getSymbolsContainer(soup)
 		except:
-			if self.getQueryNr()+1 >= len(string.ascii_lowercase):
-				self.items = 0
-				self.nextq = string.ascii_lowercase[0]
-				return []
-			else:
-				self.nextq = string.ascii_lowercase[self.getQueryNr()+1]
-				self.items = 0
-				self.totalItems = -1
+				self.nextQuery()
+				if self.isDone():
+					return []
 				return self.fetchNextSymbols()
 		symbols = self.decodeSymbolsContainer(symbolsContainer)
 		for symbol in symbols:
 			self.symbols[symbol.ticker] = symbol
 		self.items = self.items + len(symbols)
 		self.totalItems = self.getTotalItemsFromSoup(soup)
+		if len(symbols) == 0:
+			self.nextQuery()
 		return symbols
 	
 	def isDone(self):
