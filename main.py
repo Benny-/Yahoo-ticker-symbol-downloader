@@ -80,7 +80,9 @@ def main():
 		print("A exception occured while downloading. Suspending downloader to disk")
 		print("Remove downloader.pickle if this error persists")
 		saveDownloader(downloader)
-		raise ex
+		print("Succesfully saved download state")
+		print("")
+		raise
 	except KeyboardInterrupt as ex:
 		print("Suspending downloader to disk")
 		saveDownloader(downloader)

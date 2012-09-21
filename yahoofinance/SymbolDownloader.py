@@ -7,7 +7,7 @@ class SymbolDownloader:
 	"""Abstract class"""
 	
 	def __init__(self, type):
-		self.symbols = {}
+		self.symbols = {} # All downloaded symbols are stored in a dict before exporting. This is to unsure no duplicate data
 		self.type = type
 		self.nextq = string.ascii_lowercase[0]
 		self.items = 0
@@ -21,7 +21,7 @@ class SymbolDownloader:
 		return response.read().decode('utf-8')
 		
 	def makeSoup(self, html):
-		return BeautifulSoup(html) # Screw Imacros! Long live BeautifulSoup~
+		return BeautifulSoup(html)
 	
 	def getSymbolsContainer(self, soup):
 		symbolsContainer = soup.find("table", { "class" : "yui-dt" }).tbody
