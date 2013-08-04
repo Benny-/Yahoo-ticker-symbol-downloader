@@ -1,11 +1,11 @@
 Yahoo ticker downloader
 ==============================
 
-A python3 script to scrape a lot - but not all - ticker symbols from yahoo finance.
+A python3 script to scrape ticker symbols from yahoo finance.
 
-It produces a .csv file for stocks, futures, ETF, indexes, mutual funds and currency. The ticker symbol, (company)name and exchange are saved. The category is stored too for stock symbols.
+It produces a .csv file for stocks, futures, ETF, indexes, mutual funds and currency. The ticker symbol, company name and exchange are saved. The category is stored only for stock symbols.
 
-Its source is [http://finance.yahoo.com/lookup/](http://finance.yahoo.com/lookup/).
+It gets its data from [http://finance.yahoo.com/lookup/](http://finance.yahoo.com/lookup/).
 
 ## Installation
 
@@ -29,7 +29,7 @@ The first param is one of the following types: `stocks` `etf` `index` `currency`
 YahooTickerDownloader.py stocks
 ```
 
-The program takes up a lot of RAM (up to 2GB) and several hours before it produces the .csv file. Sorry. The program supports suspending and resuming a download. Simply press CTRL+C to suspend download. Restart the program in the same working directory to resume downloading.
+The program takes up a lot of RAM (up to 2GB) and several hours before it produces the .csv file. The program supports suspending and resuming a download. Simply press CTRL+C to suspend download. Restart the program in the same working directory to resume downloading.
 
 Example of output:
 ```csv
@@ -47,5 +47,5 @@ KNDI,"Kandi Technologies, Corp",NGM,"Auto Manufacturers - Major",330
 ...ect
 ```
 
-Depending on the type you are downloading, you will get 3.000 to 14.000 results.
+Depending on the type you are downloading, you will get 3.000 to 14.000 entries.
 
