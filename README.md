@@ -1,4 +1,4 @@
-Yahoo-ticker-symbol-downloader
+Yahoo ticker downloader
 ==============================
 
 A python3 script to scrape a lot (not all) ticker symbols from yahoo finance. It depends on the [Beautiful Soup](http://www.crummy.com/software/BeautifulSoup/) library.

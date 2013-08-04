@@ -6,12 +6,12 @@ import csv
 from pprint import pprint
 from time import sleep
 
-from yahoofinance.downloader.StockDownloader import StockDownloader
-from yahoofinance.downloader.ETFDownloader import ETFDownloader
-from yahoofinance.downloader.FutureDownloader import FutureDownloader
-from yahoofinance.downloader.IndexDownloader import IndexDownloader
-from yahoofinance.downloader.MutualFundDownloader import MutualFundDownloader
-from yahoofinance.downloader.CurrencyDownloader import CurrencyDownloader
+from ytd.downloader.StockDownloader import StockDownloader
+from ytd.downloader.ETFDownloader import ETFDownloader
+from ytd.downloader.FutureDownloader import FutureDownloader
+from ytd.downloader.IndexDownloader import IndexDownloader
+from ytd.downloader.MutualFundDownloader import MutualFundDownloader
+from ytd.downloader.CurrencyDownloader import CurrencyDownloader
 
 sys.setrecursionlimit(10000) # Do not remove this line. It contains magic.
 

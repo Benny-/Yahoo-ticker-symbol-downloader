@@ -1,9 +1,9 @@
-from yahoofinance.SymbolDownloader import SymbolDownloader
-from yahoofinance.symbols.ETF import ETF
+from ytd.SymbolDownloader import SymbolDownloader
+from ytd.symbols.Index import Index
 
-class ETFDownloader(SymbolDownloader):
+class IndexDownloader(SymbolDownloader):
 	def __init__(self):
-		SymbolDownloader.__init__(self, "ETF")
+		SymbolDownloader.__init__(self, "Index")
 	
 	def decodeSymbolsContainer(self, symbolsContainer):
 		symbols = []
@@ -13,6 +13,6 @@ class ETFDownloader(SymbolDownloader):
 			type = row.contents[3].string
 			exchange = row.contents[5].string
 			
-			symbols.append(ETF(ticker, name, exchange))
+			symbols.append(Index(ticker, name, exchange))
 		return symbols
 	

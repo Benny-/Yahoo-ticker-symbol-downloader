@@ -1,4 +1,4 @@
-from yahoofinance.Symbol import Symbol
+from ytd.Symbol import Symbol
 
 class Stock(Symbol):
 	def __init__(self, ticker, name, exchange, categoryName, categoryNr):

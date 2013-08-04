@@ -1,8 +1,8 @@
-from yahoofinance.Symbol import Symbol
+from ytd.Symbol import Symbol
 
-class Curreny(Symbol):
+class MutualFund(Symbol):
 	def __init__(self, ticker, name, exchange):
 		Symbol.__init__(self, ticker, name, exchange)
-	
+		
 	def getType(self):
-		return 'Curreny'
+		return 'Mutual Fund'

@@ -1,9 +1,9 @@
-from yahoofinance.SymbolDownloader import SymbolDownloader
-from yahoofinance.symbols.Future import Future
+from ytd.SymbolDownloader import SymbolDownloader
+from ytd.symbols.ETF import ETF
 
-class FutureDownloader(SymbolDownloader):
+class ETFDownloader(SymbolDownloader):
 	def __init__(self):
-		SymbolDownloader.__init__(self, "Future")
+		SymbolDownloader.__init__(self, "ETF")
 	
 	def decodeSymbolsContainer(self, symbolsContainer):
 		symbols = []
@@ -13,6 +13,6 @@ class FutureDownloader(SymbolDownloader):
 			type = row.contents[3].string
 			exchange = row.contents[5].string
 			
-			symbols.append(Future(ticker, name, exchange))
+			symbols.append(ETF(ticker, name, exchange))
 		return symbols
 	

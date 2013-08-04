@@ -1,5 +1,5 @@
-from yahoofinance.SymbolDownloader import SymbolDownloader
-from yahoofinance.symbols.Curreny import Curreny
+from ytd.SymbolDownloader import SymbolDownloader
+from ytd.symbols.Curreny import Curreny
 
 class CurrencyDownloader(SymbolDownloader):
 	def __init__(self):

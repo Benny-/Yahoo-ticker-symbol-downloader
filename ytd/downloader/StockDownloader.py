@@ -1,5 +1,5 @@
-from yahoofinance.SymbolDownloader import SymbolDownloader
-from yahoofinance.symbols.Stock import Stock
+from ytd.SymbolDownloader import SymbolDownloader
+from ytd.symbols.Stock import Stock
 
 class StockDownloader(SymbolDownloader):
 	def __init__(self):
