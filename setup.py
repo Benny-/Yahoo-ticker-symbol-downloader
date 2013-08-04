@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(
-	name = 'Yahoo ticker downloader',
+	name = 'Yahoo-ticker-downloader',
 	version = '0.1.1',
 	author = 'Benny',
 	author_email = 'Benny@GMX.it',
