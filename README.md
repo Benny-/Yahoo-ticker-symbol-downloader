@@ -9,13 +9,21 @@ Its source is [http://finance.yahoo.com/lookup/](http://finance.yahoo.com/lookup
 
 ## Installation
 
+From python package manager (preferred):
+
+```bash
+pip install Yahoo-ticker-downloader
+```
+
+From source:
+
 ```bash
 python setup.py install
 ```
 
 ## Running
 
-The first param is one of the following values: stocks etf index currency future mutualfund
+The first param is one of the following types: `stocks` `etf` `index` `currency` `future` `mutualfund`
 
 ```bash
 YahooTickerDownloader.py stocks
@@ -40,3 +48,4 @@ KNDI,"Kandi Technologies, Corp",NGM,"Auto Manufacturers - Major",330
 ```
 
 Depending on the type you are downloading, you will get 3.000 to 14.000 results.
+
