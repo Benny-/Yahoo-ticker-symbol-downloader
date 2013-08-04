@@ -36,4 +36,7 @@ KN1.DU,ECOUNION,DUS,"Business Software & Services",826
 KNCAY,"Konica Minolta Holdings Inc.",PNK,,0
 KND,"Kindred Healthcare Inc.",NYQ,"Long-Term Care Facilities",523
 KNDI,"Kandi Technologies, Corp",NGM,"Auto Manufacturers - Major",330
+...ect
 ```
+
+Depending on the type you are downloading, you will get 3.000 to 14.000 results.
