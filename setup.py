@@ -14,6 +14,7 @@ setup(
 	scripts = ['YahooTickerDownloader.py'],
     install_requires=[
         "beautifulsoup4 >= 4.2.1",
+        "requests >= 2.2.1",
     ],
 )
 
