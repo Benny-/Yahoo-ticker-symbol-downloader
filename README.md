@@ -1,7 +1,7 @@
 Yahoo ticker downloader
 ==============================
 
-A python3 script to scrape ticker symbols from yahoo finance.
+A web scraper for ticker symbols from yahoo finance.
 
 It produces a .csv file for stocks, futures, ETF, indexes, mutual funds and currency. The ticker symbol, company name and exchange are saved. The category is stored only for stock symbols.
 

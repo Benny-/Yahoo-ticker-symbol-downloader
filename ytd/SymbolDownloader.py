@@ -8,15 +8,25 @@ class SymbolDownloader:
     
     def __init__(self, type):
         self.symbols = {} # All downloaded symbols are stored in a dict before exporting. This is to unsure no duplicate data
+        self.rsession = requests.Session()
         self.type = type
         self.nextq = string.ascii_lowercase[0]
         self.items = 0
         self.totalItems = 0
     
     def fetchHtml(self):
-        request = requests.get("http://finance.yahoo.com/lookup/"+
-                            "?s="+self.nextq+"&t="+self.type[0]+"&m=ALL&r=&b="+str(self.items))
-        return request.text
+        query_string = {
+                's':self.nextq,
+                't':self.type[0],
+                'm':'ALL',
+                'r':'',
+                'b':str(self.items)
+            }
+        user_agent = { 'User-agent': 'yahoo-ticker-symbol-downloader' }
+        req = requests.Request('GET', 'http://finance.yahoo.com/lookup/', headers = user_agent, params=query_string)
+        req = req.prepare()
+        # print("req " + req.url) # Used for debugging
+        return self.rsession.send(req).text
         
     def makeSoup(self, html):
         return BeautifulSoup(html)
@@ -68,10 +78,10 @@ class SymbolDownloader:
         try:
             symbolsContainer = self.getSymbolsContainer(soup)
         except:
-                self.nextQuery()
-                if self.isDone():
-                    return []
-                return self.fetchNextSymbols()
+            self.nextQuery()
+            if self.isDone():
+                return []
+            return self.fetchNextSymbols()
         symbols = self.decodeSymbolsContainer(symbolsContainer)
         for symbol in symbols:
             self.symbols[symbol.ticker] = symbol
