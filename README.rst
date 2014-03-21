@@ -5,9 +5,9 @@ A web scraper for ticker symbols from yahoo finance.
 
 It produces a .csv file for stocks, futures, ETF, indexes, mutual funds
 and currency. The ticker symbol, company name and exchange are saved.
-The category is stored only for stock symbols.
+The category the symbol belongs to is only stored for stock symbols.
 
-It gets its data from `http://finance.yahoo.com/lookup/`_.
+It gets its data from `http://finance.yahoo.com/lookup/ <http://finance.yahoo.com/lookup/>`_
 
 Installation
 ------------
@@ -59,4 +59,8 @@ Example of output:
 Depending on the type you are downloading, you will get 3.000 to 14.000
 entries.
 
-.. _`http://finance.yahoo.com/lookup/`: http://finance.yahoo.com/lookup/
+Further resources
+-------
+
+Download history for symbols: `https://pypi.python.org/pypi/ystockquote/ <https://pypi.python.org/pypi/ystockquote/>`_
+
