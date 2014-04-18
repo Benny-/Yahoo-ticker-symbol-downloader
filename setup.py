@@ -19,9 +19,8 @@ setup(
         "requests >= 2.2.1",
     ],
     classifiers=[
-        "Operating System :: OS Independent"
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Environment :: Console",
         "Topic :: Office/Business :: Financial :: Investment",
