@@ -30,7 +30,7 @@ def loadDownloader():
 
 def saveDownloader(downloader):
     with open("downloader.pickle","wb") as file:
-        pickle.dump(downloader, file=file)
+        pickle.dump(downloader, file=file, protocol=pickle.HIGHEST_PROTOCOL)
 
 def main():
     
