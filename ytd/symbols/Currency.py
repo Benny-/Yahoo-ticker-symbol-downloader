@@ -5,4 +5,4 @@ class Curreny(Symbol):
         Symbol.__init__(self, ticker, name, exchange)
     
     def getType(self):
-        return 'Curreny'
+        return 'Currency'
