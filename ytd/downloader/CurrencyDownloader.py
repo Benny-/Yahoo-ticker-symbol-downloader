@@ -1,5 +1,5 @@
 from ytd.SymbolDownloader import SymbolDownloader
-from ytd.symbols.Curreny import Curreny
+from ytd.symbols.Currency import Currency
 
 class CurrencyDownloader(SymbolDownloader):
     def __init__(self):
@@ -13,6 +13,6 @@ class CurrencyDownloader(SymbolDownloader):
             type = row.contents[3].string
             exchange = row.contents[5].string
             
-            symbols.append(Curreny(ticker, name, exchange))
+            symbols.append(Currency(ticker, name, exchange))
         return symbols
     
