@@ -26,7 +26,9 @@ class SymbolDownloader:
         req = requests.Request('GET', 'http://finance.yahoo.com/lookup/', headers = user_agent, params=query_string)
         req = req.prepare()
         # print("req " + req.url) # Used for debugging
-        return self.rsession.send(req).text
+        resp = self.rsession.send(req)
+        resp.raise_for_status()
+        return resp.text
         
     def makeSoup(self, html):
         return BeautifulSoup(html)
