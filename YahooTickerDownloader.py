@@ -3,7 +3,6 @@
 import sys
 import pickle
 import csv
-from pprint import pprint
 from time import sleep
 
 from ytd.downloader.StockDownloader import StockDownloader
@@ -13,7 +12,9 @@ from ytd.downloader.IndexDownloader import IndexDownloader
 from ytd.downloader.MutualFundDownloader import MutualFundDownloader
 from ytd.downloader.CurrencyDownloader import CurrencyDownloader
 
-sys.setrecursionlimit(10000) # Do not remove this line. It contains magic. Required for correct pickling/unpickling.
+# Do not remove this line. It contains magic.
+# Required for correct pickling/unpickling.
+sys.setrecursionlimit(10000)
 
 options = {
     "stocks":StockDownloader(),
@@ -24,26 +25,29 @@ options = {
     "currency":CurrencyDownloader(),
 }
 
+
 def loadDownloader():
-    with open("downloader.pickle", "rb") as file:
-        return pickle.load(file);
+    with open("downloader.pickle", "rb") as f:
+        return pickle.load(f)
+
 
 def saveDownloader(downloader):
-    with open("downloader.pickle","wb") as file:
-        pickle.dump(downloader, file=file, protocol=pickle.HIGHEST_PROTOCOL)
+    with open("downloader.pickle", "wb") as f:
+        pickle.dump(downloader, file=f, protocol=pickle.HIGHEST_PROTOCOL)
+
 
 def main():
     downloader = None
 
     print("Checking if we can resume a old download session")
     try:
-        downloader = loadDownloader();
+        downloader = loadDownloader()
         print("Downloader found on disk, resuming")
     except:
         print("No old downloader found on disk")
         if(len(sys.argv) <= 1):
             print("First argument must be the symbol type to download:")
-            for key in options.keys():
+            for key in list(options.keys()):
                 print( " " + key )
             print("Example: YahooTickerDownloader.py stocks")
             exit(1)
@@ -53,7 +57,7 @@ def main():
     try:
         if not downloader.isDone():
             print("Downloading " + downloader.type)
-            print ("")
+            print("")
             symbols = downloader.fetchNextSymbols()
             lastSaveQuery = downloader.getQuery()
             while not downloader.isDone():
@@ -71,7 +75,8 @@ def main():
                     )
                 print ("")
 
-                # Save download state. We do this in case this long running is suddenly interrupted.
+                # Save download state.
+                # We do this in case this long running is suddenly interrupted.
                 if downloader.getQuery() != lastSaveQuery:
                     lastSaveQuery = downloader.getQuery()
                     print ("Saving downloader to disk...")
@@ -79,7 +84,7 @@ def main():
                     print ("Downloader successfully saved.")
                     print ("")
 
-                sleep(5) # So we don't overload the server.
+                sleep(5)  # So we don't overload the server.
 
                 symbols = downloader.fetchNextSymbols()
 
@@ -97,18 +102,18 @@ def main():
 
     if downloader.isDone():
         print("Exporting "+downloader.type+" symbols to "+downloader.type+".csv")
-        with open(downloader.type+'.csv', 'w') as csvfile:
+        with open(downloader.type + '.csv', 'w') as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(downloader.getRowHeader())
             for symbol in downloader.getCollectedSymbols():
                 row = symbol.getRow()
-                
+
                 for i, cell in enumerate(row):
                     if cell is None:
                         row[i] = ""
                     row[i] = str(cell)
-                
-                csvwriter.writerow( [s.encode("utf-8") for s in row] )
+
+                csvwriter.writerow([s.encode("utf-8") for s in row])
 
 if __name__ == "__main__":
     main()
