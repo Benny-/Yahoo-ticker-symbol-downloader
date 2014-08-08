@@ -33,7 +33,6 @@ def saveDownloader(downloader):
         pickle.dump(downloader, file=file, protocol=pickle.HIGHEST_PROTOCOL)
 
 def main():
-    
     downloader = None
 
     print("Checking if we can resume a old download session")
@@ -58,20 +57,20 @@ def main():
             symbols = downloader.fetchNextSymbols()
             lastSaveQuery = downloader.getQuery()
             while not downloader.isDone():
-            
+
                 print("Got " + str(len(symbols)) + " downloaded " + downloader.type + " symbols:")
                 if(len(symbols)>2):
                     print (" " + str(symbols[0]))
                     print (" " + str(symbols[1]))
                     print ("  ect...")
-            
+
                 print("Progress:" +
                     " Query " + str(downloader.getQueryNr()) + "/" + str(downloader.getTotalQueries()) + "."
                     " Items in current query: " + str(downloader.getItems()) + "/" + str(downloader.getTotalItems()) + "."
                     " Total collected unique " + downloader.type + " entries: " + str(downloader.getCollectedSymbolsSize())
                     )
                 print ("")
-            
+
                 # Save download state. We do this in case this long running is suddenly interrupted.
                 if downloader.getQuery() != lastSaveQuery:
                     lastSaveQuery = downloader.getQuery()
@@ -79,11 +78,11 @@ def main():
                     saveDownloader(downloader)
                     print ("Downloader successfully saved.")
                     print ("")
-            
+
                 sleep(5) # So we don't overload the server.
-                
+
                 symbols = downloader.fetchNextSymbols()
-                
+
     except Exception as ex:
         print("A exception occurred while downloading. Suspending downloader to disk")
         saveDownloader(downloader)
@@ -95,14 +94,21 @@ def main():
     except KeyboardInterrupt as ex:
         print("Suspending downloader to disk")
         saveDownloader(downloader)
-    
+
     if downloader.isDone():
         print("Exporting "+downloader.type+" symbols to "+downloader.type+".csv")
         with open(downloader.type+'.csv', 'w') as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(downloader.getRowHeader())
             for symbol in downloader.getCollectedSymbols():
-                csvwriter.writerow(symbol.getRow())
+                row = symbol.getRow()
+                
+                for i, cell in enumerate(row):
+                    if cell is None:
+                        row[i] = ""
+                    row[i] = str(cell)
+                
+                csvwriter.writerow( [s.encode("utf-8") for s in row] )
 
 if __name__ == "__main__":
     main()
