@@ -5,103 +5,112 @@ from bs4 import BeautifulSoup
 
 class SymbolDownloader:
     """Abstract class"""
-    
+
     def __init__(self, type):
-        self.symbols = {} # All downloaded symbols are stored in a dict before exporting. This is to unsure no duplicate data
+        # All downloaded symbols are stored in a dict before exporting
+        # This is to unsure no duplicate data
+        self.symbols = {}
         self.rsession = requests.Session()
         self.type = type
-        self.nextq = string.ascii_lowercase[0]
-        self.items = 0
-        self.totalItems = 0
-    
-    def fetchHtml(self):
+
+        self.current_q = string.ascii_lowercase[0]
+        self.current_q_item_offset = 0
+        self.current_q_total_items = 'Unknown'  # This field is normally a int
+        self.current_page_retries = 0
+        self.done = False
+
+    def _fetchHtml(self):
         query_string = {
-                's':self.nextq,
-                't':self.type[0],
-                'm':'ALL',
-                'r':'',
-                'b':str(self.items)
+                's': self.current_q,
+                't': self.type[0],
+                'm': 'ALL',
+                'r': '',
+                'b': str(self.current_q_item_offset)
             }
-        user_agent = { 'User-agent': 'yahoo-ticker-symbol-downloader' }
-        req = requests.Request('GET', 'http://finance.yahoo.com/lookup/', headers = user_agent, params=query_string)
+        user_agent = {'User-agent': 'yahoo-ticker-symbol-downloader'}
+        req = requests.Request('GET', 'https://finance.yahoo.com/lookup/',
+                headers=user_agent, params=query_string)
         req = req.prepare()
-        # print("req " + req.url) # Used for debugging
+        print("req " + req.url) # Used for debugging
         resp = self.rsession.send(req)
         resp.raise_for_status()
+
+        with open("responses/"+str(self.type[0])+self.current_q+str(self.current_q_item_offset)+'.html', 'w') as f:
+            f.write(resp.text.encode('utf-8'))
+
         return resp.text
-        
-    def makeSoup(self, html):
-        return BeautifulSoup(html)
-    
-    def getSymbolsContainer(self, soup):
-        symbolsContainer = soup.find("table", { "class" : "yui-dt" }).tbody
-        return symbolsContainer
-    
+
     def decodeSymbolsContainer(self, symbolsContainer):
         raise Exception("Function to extract symbols must be overwritten in subclass. Generic symbol downloader does not know how.")
-    
-    def getQuery(self):
-        return self.nextq
-    
-    def getQueryNr(self):
-        return string.ascii_lowercase.index(self.nextq)
-    
+
+    def _getQueryIndex(self):
+        return string.ascii_lowercase.index(self.current_q)
+
     def getTotalQueries(self):
         return len(string.ascii_lowercase)
-    
-    def getTotalItemsFromSoup(self, soup):
+
+    def _getTotalItemsFromSoup(self, soup):
+        total_items = None
         try:
             div = soup.find(id="pagination")
             yikkes = str(div).split("of")[1].split("|")[0]
             yikkes = "".join([char for char in yikkes if char in string.digits])
-            return int( yikkes )
+            total_items = int(yikkes)
         except Exception as ex:
-            pass
-        return -1;
-    
-    def getItems(self):
-        return self.items
-    
-    def getTotalItems(self):
-        return self.totalItems
-    
-    def nextQuery(self):
-        if self.getQueryNr()+1 >= len(string.ascii_lowercase):
-            self.items = 0
-            self.nextq = string.ascii_lowercase[0]
-        else:
-            self.nextq = string.ascii_lowercase[self.getQueryNr()+1]
-            self.items = 0
-            self.totalItems = -1
+            total_items = 'Unknown'
+        return total_items
 
-    def fetchNextSymbols(self):
-        html = self.fetchHtml()
-        soup = self.makeSoup(html)
+    def _nextQuery(self):
+        self.current_page_retries = 0
+        self.current_q_item_offset = 0
+        self.current_q_total_items = 'Unknown'
+
+        if self._getQueryIndex() + 1 >= len(string.ascii_lowercase):
+            self.current_q = string.ascii_lowercase[0]
+            self.done = True
+        else:
+            self.current_q = string.ascii_lowercase[self._getQueryIndex() + 1]
+
+    def nextRequest(self):
+        html = self._fetchHtml()
+        soup = BeautifulSoup(html)
+        symbols = None
+
         try:
-            symbolsContainer = self.getSymbolsContainer(soup)
+            symbolsContainer = soup.find("table", {"class": "yui-dt"}).tbody
+            symbols = self.decodeSymbolsContainer(symbolsContainer)
         except:
-            self.nextQuery()
-            if self.isDone():
-                return []
-            return self.fetchNextSymbols()
-        symbols = self.decodeSymbolsContainer(symbolsContainer)
+            symbols = []
+
         for symbol in symbols:
             self.symbols[symbol.ticker] = symbol
-        self.items = self.items + len(symbols)
-        self.totalItems = self.getTotalItemsFromSoup(soup)
+
+        self.current_q_item_offset = self.current_q_item_offset + len(symbols)
+        self.current_q_total_items = self._getTotalItemsFromSoup(soup)
         if len(symbols) == 0:
-            self.nextQuery()
+            self.current_page_retries += 1
+            if self.current_page_retries > 20:
+                self._nextQuery()
+        else:
+            self.current_page_retries = 0
         return symbols
-    
+
     def isDone(self):
-        return self.nextq == string.ascii_lowercase[0] and self.items == 0 and len(self.symbols) > 0
-    
+        return self.done
+
     def getCollectedSymbols(self):
         return self.symbols.values()
-    
-    def getCollectedSymbolsSize(self):
-        return len(self.symbols)
-    
+
     def getRowHeader(self):
         return ["Ticker", "Name", "Exchange"]
 
+    def printProgress(self):
+        if self.isDone():
+            print("Progress: Done!")
+        else:
+            print("Progress:" +
+                " Query " + str(self._getQueryIndex()) + "/" + str(self.getTotalQueries()) + "."
+                " Items handled in current query: " + str(self.current_q_item_offset) + "/" + str(self.current_q_total_items) + "."
+                " Total collected unique " + self.type + " entries: " + str(len(self.symbols))
+                )
+        print ("")

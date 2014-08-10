@@ -17,12 +17,12 @@ from ytd.downloader.CurrencyDownloader import CurrencyDownloader
 sys.setrecursionlimit(10000)
 
 options = {
-    "stocks":StockDownloader(),
-    "etf":ETFDownloader(),
-    "future":FutureDownloader(),
-    "index":IndexDownloader(),
-    "mutualfund":MutualFundDownloader(),
-    "currency":CurrencyDownloader(),
+    "stocks": StockDownloader(),
+    "etf": ETFDownloader(),
+    "future": FutureDownloader(),
+    "index": IndexDownloader(),
+    "mutualfund": MutualFundDownloader(),
+    "currency": CurrencyDownloader(),
 }
 
 
@@ -35,6 +35,31 @@ def saveDownloader(downloader):
     with open("downloader.pickle", "wb") as f:
         pickle.dump(downloader, file=f, protocol=pickle.HIGHEST_PROTOCOL)
 
+
+def downloadEverything(downloader):
+
+    loop = 0
+    while not downloader.isDone():
+
+        symbols = downloader.nextRequest()
+        print("Got " + str(len(symbols)) + " downloaded " + downloader.type + " symbols:")
+        if(len(symbols)>2):
+            print (" " + str(symbols[0]))
+            print (" " + str(symbols[1]))
+            print ("  ect...")
+        downloader.printProgress()
+
+        # Save download state occasionally.
+        # We do this in case this long running is suddenly interrupted.
+        loop = loop + 1
+        if loop % 50 == 0:
+            print ("Saving downloader to disk...")
+            saveDownloader(downloader)
+            print ("Downloader successfully saved.")
+            print ("")
+
+        if not downloader.isDone():
+            sleep(5)  # So we don't overload the server.
 
 def main():
     downloader = None
@@ -58,35 +83,10 @@ def main():
         if not downloader.isDone():
             print("Downloading " + downloader.type)
             print("")
-            symbols = downloader.fetchNextSymbols()
-            lastSaveQuery = downloader.getQuery()
-            while not downloader.isDone():
-
-                print("Got " + str(len(symbols)) + " downloaded " + downloader.type + " symbols:")
-                if(len(symbols)>2):
-                    print (" " + str(symbols[0]))
-                    print (" " + str(symbols[1]))
-                    print ("  ect...")
-
-                print("Progress:" +
-                    " Query " + str(downloader.getQueryNr()) + "/" + str(downloader.getTotalQueries()) + "."
-                    " Items in current query: " + str(downloader.getItems()) + "/" + str(downloader.getTotalItems()) + "."
-                    " Total collected unique " + downloader.type + " entries: " + str(downloader.getCollectedSymbolsSize())
-                    )
-                print ("")
-
-                # Save download state.
-                # We do this in case this long running is suddenly interrupted.
-                if downloader.getQuery() != lastSaveQuery:
-                    lastSaveQuery = downloader.getQuery()
-                    print ("Saving downloader to disk...")
-                    saveDownloader(downloader)
-                    print ("Downloader successfully saved.")
-                    print ("")
-
-                sleep(5)  # So we don't overload the server.
-
-                symbols = downloader.fetchNextSymbols()
+            downloadEverything(downloader);
+        else:
+            print("The downloader has already finished downloading everything")
+            print("")
 
     except Exception as ex:
         print("A exception occurred while downloading. Suspending downloader to disk")
@@ -111,7 +111,8 @@ def main():
                 for i, cell in enumerate(row):
                     if cell is None:
                         row[i] = ""
-                    row[i] = str(cell)
+                    if isinstance(cell, int) or isinstance(cell, float):
+                        row[i] = str(cell)
 
                 csvwriter.writerow([s.encode("utf-8") for s in row])
 
