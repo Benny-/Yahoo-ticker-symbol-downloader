@@ -4,7 +4,7 @@ from ytd.symbols.Stock import Stock
 class StockDownloader(SymbolDownloader):
     def __init__(self):
         SymbolDownloader.__init__(self, "Stock")
-    
+
     def decodeSymbolsContainer(self, symbolsContainer):
         symbols = []
         for row in symbolsContainer:
@@ -16,7 +16,7 @@ class StockDownloader(SymbolDownloader):
             if(categoryName != None):
                 categoryNr = row.contents[4].a.get('href').split("/").pop().split(".")[0]
             exchange = row.contents[5].string
-            
+
             symbols.append(Stock(ticker, companyName, exchange, categoryName, categoryNr))
         return symbols
 

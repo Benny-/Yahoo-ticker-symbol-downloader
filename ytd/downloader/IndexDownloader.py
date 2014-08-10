@@ -4,7 +4,7 @@ from ytd.symbols.Index import Index
 class IndexDownloader(SymbolDownloader):
     def __init__(self):
         SymbolDownloader.__init__(self, "Index")
-    
+
     def decodeSymbolsContainer(self, symbolsContainer):
         symbols = []
         for row in symbolsContainer:
@@ -12,7 +12,7 @@ class IndexDownloader(SymbolDownloader):
             name = row.contents[1].string
             type = row.contents[3].string
             exchange = row.contents[5].string
-            
+
             symbols.append(Index(ticker, name, exchange))
         return symbols
-    
+

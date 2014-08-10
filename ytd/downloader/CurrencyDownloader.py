@@ -4,7 +4,7 @@ from ytd.symbols.Currency import Currency
 class CurrencyDownloader(SymbolDownloader):
     def __init__(self):
         SymbolDownloader.__init__(self, "Currency")
-    
+
     def decodeSymbolsContainer(self, symbolsContainer):
         symbols = []
         for row in symbolsContainer:
@@ -12,7 +12,7 @@ class CurrencyDownloader(SymbolDownloader):
             name = row.contents[1].string
             type = row.contents[3].string
             exchange = row.contents[5].string
-            
+
             symbols.append(Currency(ticker, name, exchange))
         return symbols
-    
+
