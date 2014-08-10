@@ -1,5 +1,5 @@
-from ytd.SymbolDownloader import SymbolDownloader
-from ytd.symbols.Index import Index
+from ..SymbolDownloader import SymbolDownloader
+from ..symbols.Index import Index
 
 class IndexDownloader(SymbolDownloader):
     def __init__(self):

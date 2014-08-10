@@ -1,5 +1,5 @@
-from ytd.SymbolDownloader import SymbolDownloader
-from ytd.symbols.MutualFund import MutualFund
+from ..SymbolDownloader import SymbolDownloader
+from ..symbols.MutualFund import MutualFund
 
 class MutualFundDownloader(SymbolDownloader):
     def __init__(self):

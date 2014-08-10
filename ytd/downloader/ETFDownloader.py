@@ -1,5 +1,5 @@
-from ytd.SymbolDownloader import SymbolDownloader
-from ytd.symbols.ETF import ETF
+from ..SymbolDownloader import SymbolDownloader
+from ..symbols.ETF import ETF
 
 class ETFDownloader(SymbolDownloader):
     def __init__(self):

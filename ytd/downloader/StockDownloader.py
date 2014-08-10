@@ -1,5 +1,5 @@
-from ytd.SymbolDownloader import SymbolDownloader
-from ytd.symbols.Stock import Stock
+from ..SymbolDownloader import SymbolDownloader
+from ..symbols.Stock import Stock
 
 class StockDownloader(SymbolDownloader):
     def __init__(self):

@@ -1,4 +1,4 @@
-from ytd.Symbol import Symbol
+from ..Symbol import Symbol
 
 class Stock(Symbol):
     def __init__(self, ticker, name, exchange, categoryName, categoryNr):
@@ -6,7 +6,7 @@ class Stock(Symbol):
         self.categoryName = categoryName
         self.categoryNr = categoryNr
 
-    
+
     def getType(self):
         return 'Stock'
 

@@ -1,5 +1,5 @@
-from ytd.SymbolDownloader import SymbolDownloader
-from ytd.symbols.Currency import Currency
+from ..SymbolDownloader import SymbolDownloader
+from ..symbols.Currency import Currency
 
 class CurrencyDownloader(SymbolDownloader):
     def __init__(self):
