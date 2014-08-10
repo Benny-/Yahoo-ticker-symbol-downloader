@@ -35,9 +35,6 @@ class SymbolDownloader:
         resp = self.rsession.send(req)
         resp.raise_for_status()
 
-        with open("responses/"+str(self.type[0])+self.current_q+str(self.current_q_item_offset)+'.html', 'w') as f:
-            f.write(resp.text.encode('utf-8'))
-
         return resp.text
 
     def decodeSymbolsContainer(self, symbolsContainer):
