@@ -7,7 +7,9 @@ It produces a .csv file for stocks, futures, ETF, indexes, mutual funds
 and currency. The ticker symbol, company name and exchange are saved.
 The category the symbol belongs to is only stored for stock symbols.
 
-It gets its data from `http://finance.yahoo.com/lookup/`_.
+It gets its data from `http://finance.yahoo.com/lookup/`_. Please note: it
+is not possible to get all the symbols due to limitations set by Yahoo.
+About 75%-90% of all symbols are gathered using this script depending on type.
 
 Installation
 ---------------------
@@ -63,6 +65,16 @@ Further resources
 ---------------------
 
 Download history for symbols: ystockquote_
+
+Changelog
+---------------------
+
+* Version 0.3.0
+
+  * Use https instead of http
+  * Retry to fetch a page if it contains no symbols
+  * Renamed all 'Curreny' to 'Currency'
+  * Relative imports are used
 
 .. _`http://finance.yahoo.com/lookup/`: http://finance.yahoo.com/lookup/
 .. _ystockquote: https://pypi.python.org/pypi/ystockquote/
