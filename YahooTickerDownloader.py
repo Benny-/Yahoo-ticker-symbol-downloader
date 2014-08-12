@@ -2,7 +2,7 @@
 
 import sys
 import pickle
-import csv
+import tablib
 from time import sleep
 
 from ytd.downloader.StockDownloader import StockDownloader
@@ -101,21 +101,25 @@ def main():
         saveDownloader(downloader)
 
     if downloader.isDone():
-        print("Exporting "+downloader.type+" symbols to "+downloader.type+".csv")
-        with open(downloader.type + '.csv', 'w') as csvfile:
-            csvwriter = csv.writer(csvfile)
-            csvwriter.writerow(downloader.getRowHeader())
-            for symbol in downloader.getCollectedSymbols():
-                row = symbol.getRow()
+        print("Exporting "+downloader.type+" symbols")
 
-                for i, cell in enumerate(row):
-                    if cell is None:
-                        row[i] = ""
-                    if isinstance(cell, int) or isinstance(cell, float):
-                        row[i] = str(cell)
+        data = tablib.Dataset()
+        data.headers = downloader.getRowHeader()
 
-                csvwriter.writerow([s.encode("utf-8") for s in row])
+        for symbol in downloader.getCollectedSymbols():
+            data.append(symbol.getRow())
+
+        with open(downloader.type + '.csv', 'wb') as csvfile:
+            csvfile.write(data.csv)
+
+        with open(downloader.type + '.json', 'w') as csvfile:
+            csvfile.write(data.json)
+
+        with open(downloader.type + '.yaml', 'w') as csvfile:
+            csvfile.write(data.yaml)
+
+        with open(downloader.type + '.xls', 'wb') as csvfile:
+            csvfile.write(data.xls)
 
 if __name__ == "__main__":
     main()
-

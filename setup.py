@@ -17,6 +17,7 @@ setup(
     install_requires=[
         "beautifulsoup4 >= 4.2.1",
         "requests >= 2.2.1",
+        "tablib >= 0.9.11",
     ],
     classifiers=[
         "Operating System :: OS Independent",
