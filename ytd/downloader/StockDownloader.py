@@ -14,7 +14,7 @@ class StockDownloader(SymbolDownloader):
             categoryName = row.contents[4].string
             categoryNr = 0
             if(categoryName != None):
-                categoryNr = row.contents[4].a.get('href').split("/").pop().split(".")[0]
+                categoryNr = int(row.contents[4].a.get('href').split("/").pop().split(".")[0])
             exchange = row.contents[5].string
 
             symbols.append(Stock(ticker, companyName, exchange, categoryName, categoryNr))
