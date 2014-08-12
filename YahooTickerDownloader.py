@@ -44,8 +44,8 @@ def downloadEverything(downloader):
         symbols = downloader.nextRequest()
         print("Got " + str(len(symbols)) + " downloaded " + downloader.type + " symbols:")
         if(len(symbols)>2):
-            print (" " + str(symbols[0]))
-            print (" " + str(symbols[1]))
+            print (" " + unicode(symbols[0]))
+            print (" " + unicode(symbols[1]))
             print ("  ect...")
         downloader.printProgress()
 

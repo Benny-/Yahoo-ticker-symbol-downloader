@@ -12,4 +12,7 @@ class Symbol:
         return [self.ticker, self.name, self.exchange]
 
     def __str__(self):
-        return self.getType() + " " + self.ticker + " " + str(self.exchange) + " " + str(self.name)
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return u"" + self.getType() + u" " + self.ticker + u" " + unicode(self.exchange) + u" " + unicode(self.name)
