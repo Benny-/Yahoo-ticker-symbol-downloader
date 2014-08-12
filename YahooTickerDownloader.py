@@ -52,7 +52,7 @@ def downloadEverything(downloader):
         # Save download state occasionally.
         # We do this in case this long running is suddenly interrupted.
         loop = loop + 1
-        if loop % 50 == 0:
+        if loop % 200 == 0:
             print ("Saving downloader to disk...")
             saveDownloader(downloader)
             print ("Downloader successfully saved.")
@@ -83,7 +83,11 @@ def main():
         if not downloader.isDone():
             print("Downloading " + downloader.type)
             print("")
-            downloadEverything(downloader);
+            downloadEverything(downloader)
+            print ("Saving downloader to disk...")
+            saveDownloader(downloader)
+            print ("Downloader successfully saved.")
+            print ("")
         else:
             print("The downloader has already finished downloading everything")
             print("")
