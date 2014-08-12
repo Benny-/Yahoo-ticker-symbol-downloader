@@ -13,7 +13,8 @@ class SymbolDownloader:
         self.rsession = requests.Session()
         self.type = type
 
-        self.current_q = string.ascii_lowercase[0]
+        self.queries = string.ascii_lowercase;
+        self.current_q = self.queries[0]
         self.current_q_item_offset = 0
         self.current_q_total_items = 'Unknown'  # This field is normally a int
         self.current_page_retries = 0
@@ -41,10 +42,10 @@ class SymbolDownloader:
         raise Exception("Function to extract symbols must be overwritten in subclass. Generic symbol downloader does not know how.")
 
     def _getQueryIndex(self):
-        return string.ascii_lowercase.index(self.current_q)
+        return self.queries.index(self.current_q)
 
     def getTotalQueries(self):
-        return len(string.ascii_lowercase)
+        return len(self.queries)
 
     def _getTotalItemsFromSoup(self, soup):
         total_items = None
@@ -62,11 +63,11 @@ class SymbolDownloader:
         self.current_q_item_offset = 0
         self.current_q_total_items = 'Unknown'
 
-        if self._getQueryIndex() + 1 >= len(string.ascii_lowercase):
-            self.current_q = string.ascii_lowercase[0]
+        if self._getQueryIndex() + 1 >= len(self.queries):
+            self.current_q = self.queries[0]
             self.done = True
         else:
-            self.current_q = string.ascii_lowercase[self._getQueryIndex() + 1]
+            self.current_q = self.queries[self._getQueryIndex() + 1]
 
     def nextRequest(self):
         html = self._fetchHtml()
