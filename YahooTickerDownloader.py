@@ -13,6 +13,8 @@ from ytd.downloader.MutualFundDownloader import MutualFundDownloader
 from ytd.downloader.CurrencyDownloader import CurrencyDownloader
 from ytd.compat import unicode
 
+import bs4
+
 # Do not remove this line. It contains magic.
 # Required for correct pickling/unpickling.
 sys.setrecursionlimit(10000)
@@ -111,8 +113,18 @@ def main():
         data = tablib.Dataset()
         data.headers = downloader.getRowHeader()
 
+        # This piece is a workaround for old saved downloader.pickle's
+        # who still have bs4.element.NavigableString classes pickled.
+        # It can be removed in next release.
         for symbol in downloader.getCollectedSymbols():
-            data.append(symbol.getRow())
+            row = symbol.getRow()
+            for i, cell in enumerate(row):
+                if cell is None:
+                    row[i] = ""
+                if isinstance(cell, bs4.element.NavigableString):
+                    row[i] = unicode(cell)
+
+            data.append(row)
 
         with open(downloader.type + '.csv', 'w') as csvfile:
             csvfile.write(data.csv)
