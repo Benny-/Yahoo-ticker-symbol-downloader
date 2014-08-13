@@ -74,8 +74,13 @@ class SymbolDownloader:
         soup = BeautifulSoup(html)
         symbols = None
 
-        symbolsContainer = soup.find("table", {"class": "yui-dt"}).tbody
         try:
+            # A exception is thrown here for the following reasons:
+            # 1. Yahoo does not include a table (or any results!) if you
+            #    request items at offset 2020 or more
+            # 2. Yahoo randomly screws a http request up and table is missing.
+            #    A succesive http request might not result in a exception here.
+            symbolsContainer = soup.find("table", {"class": "yui-dt"}).tbody
             symbols = self.decodeSymbolsContainer(symbolsContainer)
         except:
             symbols = []
