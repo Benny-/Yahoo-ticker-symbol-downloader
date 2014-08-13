@@ -1,3 +1,5 @@
+from .compat import is_py3, unicode
+
 class Symbol:
     """Abstract class"""
     def __init__(self, ticker, name, exchange):
@@ -11,8 +13,8 @@ class Symbol:
     def getRow(self):
         return [self.ticker, self.name, self.exchange]
 
-    def __str__(self):
-        return unicode(self).encode('utf-8')
-
     def __unicode__(self):
-        return u"" + self.getType() + u" " + self.ticker + u" " + unicode(self.exchange) + u" " + unicode(self.name)
+        return "" + self.getType() + " " + self.ticker + " " + unicode(self.exchange) + " " + unicode(self.name)
+
+if is_py3:
+    Symbol.__str__ = Symbol.__unicode__

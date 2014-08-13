@@ -74,8 +74,8 @@ class SymbolDownloader:
         soup = BeautifulSoup(html)
         symbols = None
 
+        symbolsContainer = soup.find("table", {"class": "yui-dt"}).tbody
         try:
-            symbolsContainer = soup.find("table", {"class": "yui-dt"}).tbody
             symbols = self.decodeSymbolsContainer(symbolsContainer)
         except:
             symbols = []

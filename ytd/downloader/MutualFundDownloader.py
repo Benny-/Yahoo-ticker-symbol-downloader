@@ -1,6 +1,8 @@
 from ..SymbolDownloader import SymbolDownloader
 from ..symbols.MutualFund import MutualFund
 
+from ..compat import unicode
+
 class MutualFundDownloader(SymbolDownloader):
     def __init__(self):
         SymbolDownloader.__init__(self, "MutualFund")
@@ -8,10 +10,14 @@ class MutualFundDownloader(SymbolDownloader):
     def decodeSymbolsContainer(self, symbolsContainer):
         symbols = []
         for row in symbolsContainer:
-            ticker = row.contents[0].string
+            ticker = unicode(row.contents[0].string)
             name = row.contents[1].string
+            if name is not None:
+                name = unicode(name)
             type = row.contents[3].string
             exchange = row.contents[5].string
+            if exchange is not None:
+                exchange = unicode(exchange)
 
             symbols.append(MutualFund(ticker, name, exchange))
         return symbols

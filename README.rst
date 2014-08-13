@@ -72,9 +72,10 @@ Changelog
 * Version 0.3.0
 
   * Use https instead of http
-  * Retry to fetch a page if it contains no symbols
+  * Retry to fetch a page if it contains no symbols (A "fix" for issue #4)
   * Renamed all 'Curreny' to 'Currency'
   * Relative imports are used
+  * Fix: .csv file it outputs is encoded in UTF-8 when using python2
 
 .. _`http://finance.yahoo.com/lookup/`: http://finance.yahoo.com/lookup/
 .. _ystockquote: https://pypi.python.org/pypi/ystockquote/

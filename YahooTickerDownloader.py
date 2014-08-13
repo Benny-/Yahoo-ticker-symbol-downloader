@@ -11,6 +11,7 @@ from ytd.downloader.FutureDownloader import FutureDownloader
 from ytd.downloader.IndexDownloader import IndexDownloader
 from ytd.downloader.MutualFundDownloader import MutualFundDownloader
 from ytd.downloader.CurrencyDownloader import CurrencyDownloader
+from ytd.compat import unicode
 
 # Do not remove this line. It contains magic.
 # Required for correct pickling/unpickling.
@@ -113,7 +114,7 @@ def main():
         for symbol in downloader.getCollectedSymbols():
             data.append(symbol.getRow())
 
-        with open(downloader.type + '.csv', 'wb') as csvfile:
+        with open(downloader.type + '.csv', 'w') as csvfile:
             csvfile.write(data.csv)
 
         with open(downloader.type + '.json', 'w') as csvfile:
