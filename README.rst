@@ -1,9 +1,8 @@
 Yahoo ticker downloader
 =======================
 
-A web scraper for ticker symbols from yahoo finance.
-
-It produces a .csv file for stocks, futures, ETF, indexes, mutual funds
+Produces .csv, .json, .yaml, and .xls files (All files contain same data in a 
+different format) for stocks, futures, ETF, indexes, mutual funds
 and currency. The ticker symbol, company name and exchange are saved.
 The category the symbol belongs to is only stored for stock symbols.
 
@@ -36,9 +35,9 @@ The first param is one of the following types: ``stocks`` ``etf``
 
     YahooTickerDownloader.py stocks
 
-The program takes up a lot of RAM (up to 2GB) and several hours before
-it produces the .csv file. The program supports suspending and resuming
-a download. Simply press CTRL+C to suspend download. Restart the program
+The program takes several hours before any output is generated.
+The program supports suspending and resuming a download.
+Press CTRL+C to suspend download. Restart the program
 in the same working directory to resume downloading.
 
 Example of output:
@@ -58,7 +57,7 @@ Example of output:
     KNDI,"Kandi Technologies, Corp",NGM,"Auto Manufacturers - Major",330
     ...ect
 
-Depending on the type you are downloading, you will get 3.000 to 14.000
+Depending on the type you are downloading, you will between 3.000 and 26.000
 entries.
 
 Further resources
@@ -76,6 +75,8 @@ Changelog
   * Renamed all 'Curreny' to 'Currency'
   * Relative imports are used
   * Fix: .csv file it outputs is encoded in UTF-8 when using python2
+  * Performance: Considerable reduced memory consumption
+  * It now outputs .json, .yaml and .xls files in addition to .csv
 
 .. _`http://finance.yahoo.com/lookup/`: http://finance.yahoo.com/lookup/
 .. _ystockquote: https://pypi.python.org/pypi/ystockquote/
