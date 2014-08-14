@@ -126,17 +126,17 @@ def main():
 
             data.append(row)
 
-        with open(downloader.type + '.csv', 'w') as csvfile:
-            csvfile.write(data.csv)
+        with open(downloader.type + '.csv', 'w') as f:
+            f.write(data.csv)
 
-        with open(downloader.type + '.json', 'w') as csvfile:
-            csvfile.write(data.json)
+        with open(downloader.type + '.json', 'w') as f:
+            f.write(data.json)
 
-        with open(downloader.type + '.yaml', 'w') as csvfile:
-            csvfile.write(data.yaml)
+        with open(downloader.type + '.yaml', 'w') as f:
+            f.write(data.yaml)
 
-        with open(downloader.type + '.xls', 'wb') as csvfile:
-            csvfile.write(data.xls)
+        with open(downloader.type + '.xls', 'wb') as f:
+            f.write(data.xls)
 
 if __name__ == "__main__":
     main()
