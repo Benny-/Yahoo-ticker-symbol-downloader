@@ -11,6 +11,8 @@ from ytd.downloader.FutureDownloader import FutureDownloader
 from ytd.downloader.IndexDownloader import IndexDownloader
 from ytd.downloader.MutualFundDownloader import MutualFundDownloader
 from ytd.downloader.CurrencyDownloader import CurrencyDownloader
+from ytd.downloader.WarrantDownloader import WarrantDownloader
+from ytd.downloader.BondDownloader import BondDownloader
 from ytd.compat import unicode
 
 import bs4
@@ -26,6 +28,8 @@ options = {
     "index": IndexDownloader(),
     "mutualfund": MutualFundDownloader(),
     "currency": CurrencyDownloader(),
+    "warrant": WarrantDownloader(),
+    "bond": BondDownloader(),
 }
 
 
