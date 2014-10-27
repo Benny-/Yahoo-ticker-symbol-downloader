@@ -15,18 +15,13 @@ class WarrantDownloader(SymbolDownloader):
             if name is not None:
                 name = unicode(name)
             type = row.contents[3].string
-            categoryName = row.contents[4].string
-            if categoryName is not None:
-                categoryName = unicode(categoryName)
-            categoryNr = 0
-            if(categoryName != None):
-                categoryNr = int(row.contents[4].a.get('href').split("/").pop().split(".")[0])
+
             exchange = row.contents[5].string
             if exchange is not None:
                 exchange = unicode(exchange)
 
-            symbols.append(Warrant(ticker, name, exchange, categoryName, categoryNr))
+            symbols.append(Warrant(ticker, name, exchange))
         return symbols
 
     def getRowHeader(self):
-        return SymbolDownloader.getRowHeader(self) + ["categoryName", "categoryNr"]
+        return SymbolDownloader.getRowHeader(self)
