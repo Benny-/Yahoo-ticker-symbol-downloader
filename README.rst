@@ -69,6 +69,7 @@ Changelog
 ---------------------
 
 * Version 0.4.0
+
   * Warrant symbols can now be downloaded.
   * Bond symbols can now be downloaded.
 
