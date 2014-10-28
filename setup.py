@@ -9,7 +9,7 @@ setup(
     author_email = 'Benny@GMX.it',
     url='https://github.com/Benny-/Yahoo-ticker-symbol-downloader',
     license='Public Domain',
-    keywords = "market finance yahoo ticker stocks etf future index mutualfund currency".split(),
+    keywords = "market finance yahoo ticker stock stocks etf future futures index mutualfund currency warrant bond bonds".split(),
     description='A web scraper for ticker symbols from yahoo finance',
     long_description = open('README.rst').read(),
     packages = find_packages(),

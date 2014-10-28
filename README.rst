@@ -1,9 +1,9 @@
 Yahoo ticker downloader
 =======================
 
-Produces .csv, .json, .yaml, and .xls files (All files contain same data in a 
-different format) for stocks, futures, ETF, indexes, mutual funds
-and currency. The ticker symbol, company name and exchange are saved.
+Produces .csv, .json, .yaml, and .xls files (All files contain same data in a
+different format) for stocks, ETF, futures, indexes, mutual funds, currency,
+warrants and bonds. The ticker symbol, company name and exchange are saved.
 The category the symbol belongs to is only stored for stock symbols.
 
 It gets its data from `http://finance.yahoo.com/lookup/`_. Please note: it
@@ -29,7 +29,7 @@ Running
 ---------------------
 
 The first param is one of the following types: ``stocks`` ``etf``
-``index`` ``currency`` ``future`` ``mutualfund``
+``future`` ``index`` ``mutualfund`` ``currency`` ``warrant`` ``bond``
 
 .. code:: bash
 
@@ -67,6 +67,10 @@ Download history for symbols: ystockquote_
 
 Changelog
 ---------------------
+
+* Version 0.4.0
+  * Warrant symbols can now be downloaded.
+  * Bond symbols can now be downloaded.
 
 * Version 0.3.0
 
