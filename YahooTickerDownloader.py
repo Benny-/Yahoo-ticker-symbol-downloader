@@ -17,10 +17,6 @@ from ytd.compat import unicode
 
 import bs4
 
-# Do not remove this line. It contains magic.
-# Required for correct pickling/unpickling.
-sys.setrecursionlimit(10000)
-
 options = {
     "stocks": StockDownloader(),
     "etf": ETFDownloader(),
