@@ -121,18 +121,8 @@ def main():
         data = tablib.Dataset()
         data.headers = downloader.getRowHeader()
 
-        # This piece is a workaround for old saved downloader.pickle's
-        # who still have bs4.element.NavigableString classes pickled.
-        # It can be removed in next release.
         for symbol in downloader.getCollectedSymbols():
-            row = symbol.getRow()
-            for i, cell in enumerate(row):
-                if cell is None:
-                    row[i] = ""
-                if isinstance(cell, bs4.element.NavigableString):
-                    row[i] = unicode(cell)
-
-            data.append(row)
+            data.append(symbol.getRow())
 
         with open(downloader.type + '.csv', 'w') as f:
             f.write(data.csv)
