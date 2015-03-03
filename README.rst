@@ -71,7 +71,7 @@ Changelog
 * Version 0.5.0
 
   * Allows downloading using a insecure connection.
-  * Temporarily download state now includes the ticker type.
+  * The temporarily download file-names now include the ticker type.
 
 * Version 0.4.0
 
