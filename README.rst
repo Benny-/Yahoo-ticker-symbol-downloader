@@ -68,6 +68,11 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
+* Version 0.5.0
+
+  * Allows downloading using a insecure connection.
+  * Temporarily download state now includes the ticker type.
+
 * Version 0.4.0
 
   * Warrant symbols can now be downloaded.

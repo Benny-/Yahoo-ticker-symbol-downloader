@@ -20,7 +20,7 @@ class SymbolDownloader:
         self.current_page_retries = 0
         self.done = False
 
-    def _fetchHtml(self):
+    def _fetchHtml(self, insecure):
         query_string = {
                 's': self.current_q,
                 't': self.type[0],
@@ -28,8 +28,10 @@ class SymbolDownloader:
                 'r': '',
                 'b': str(self.current_q_item_offset)
             }
+
+        protocol = 'http' if insecure else 'https'
         user_agent = {'User-agent': 'yahoo-ticker-symbol-downloader'}
-        req = requests.Request('GET', 'https://finance.yahoo.com/lookup/',
+        req = requests.Request('GET', protocol+'://finance.yahoo.com/lookup/',
                 headers=user_agent, params=query_string)
         req = req.prepare()
         print("req " + req.url) # Used for debugging
@@ -69,8 +71,8 @@ class SymbolDownloader:
         else:
             self.current_q = self.queries[self._getQueryIndex() + 1]
 
-    def nextRequest(self):
-        html = self._fetchHtml()
+    def nextRequest(self, insecure=False):
+        html = self._fetchHtml(insecure)
         soup = BeautifulSoup(html)
         symbols = None
 

@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-import sys
 import pickle
-import tablib
 from time import sleep
+import argparse
 
 from ytd.downloader.StockDownloader import StockDownloader
 from ytd.downloader.ETFDownloader import ETFDownloader
@@ -15,6 +14,7 @@ from ytd.downloader.WarrantDownloader import WarrantDownloader
 from ytd.downloader.BondDownloader import BondDownloader
 from ytd.compat import unicode
 
+import tablib
 import bs4
 
 options = {
@@ -29,22 +29,22 @@ options = {
 }
 
 
-def loadDownloader():
-    with open("downloader.pickle", "rb") as f:
+def loadDownloader(tickerType):
+    with open(tickerType + ".pickle", "rb") as f:
         return pickle.load(f)
 
 
-def saveDownloader(downloader):
-    with open("downloader.pickle", "wb") as f:
+def saveDownloader(downloader, tickerType):
+    with open(tickerType + ".pickle", "wb") as f:
         pickle.dump(downloader, file=f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def downloadEverything(downloader):
+def downloadEverything(downloader, tickerType, insecure):
 
     loop = 0
     while not downloader.isDone():
 
-        symbols = downloader.nextRequest()
+        symbols = downloader.nextRequest(insecure)
         print("Got " + str(len(symbols)) + " downloaded " + downloader.type + " symbols:")
         if(len(symbols)>2):
             print (" " + unicode(symbols[0]))
@@ -57,7 +57,7 @@ def downloadEverything(downloader):
         loop = loop + 1
         if loop % 200 == 0:
             print ("Saving downloader to disk...")
-            saveDownloader(downloader)
+            saveDownloader(downloader, tickerType)
             print ("Downloader successfully saved.")
             print ("")
 
@@ -67,28 +67,36 @@ def downloadEverything(downloader):
 def main():
     downloader = None
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--insecure", help="use HTTP instead of HTTPS", action="store_true")
+    parser.add_argument('type', help='The type to download, this can be: '+" ".join(list(options.keys())))
+    args = parser.parse_args()
+
+    if args.insecure:
+        print("Using insecure connection")
+
+    tickerType = args.type = args.type.lower()
+
     print("Checking if we can resume a old download session")
     try:
-        downloader = loadDownloader()
+        downloader = loadDownloader(tickerType)
         print("Downloader found on disk, resuming")
     except:
         print("No old downloader found on disk")
-        if(len(sys.argv) <= 1):
-            print("First argument must be the symbol type to download:")
-            for key in list(options.keys()):
-                print( " " + key )
-            print("Example: YahooTickerDownloader.py stocks")
+        print("Starting a new session")
+        if tickerType not in options:
+            print("Error: " + tickerType + " is not a valid type option. See --help")
             exit(1)
         else:
-            downloader = options[sys.argv[1]]
+            downloader = options[tickerType]
 
     try:
         if not downloader.isDone():
             print("Downloading " + downloader.type)
             print("")
-            downloadEverything(downloader)
+            downloadEverything(downloader, tickerType, args.insecure)
             print ("Saving downloader to disk...")
-            saveDownloader(downloader)
+            saveDownloader(downloader, tickerType)
             print ("Downloader successfully saved.")
             print ("")
         else:
@@ -97,7 +105,7 @@ def main():
 
     except Exception as ex:
         print("A exception occurred while downloading. Suspending downloader to disk")
-        saveDownloader(downloader)
+        saveDownloader(downloader, tickerType)
         print("Successfully saved download state")
         print("Remove downloader.pickle if this error persists")
         print("Issues can be reported on https://github.com/Benny-/Yahoo-ticker-symbol-downloader/issues")
@@ -105,7 +113,7 @@ def main():
         raise
     except KeyboardInterrupt as ex:
         print("Suspending downloader to disk")
-        saveDownloader(downloader)
+        saveDownloader(downloader, tickerType)
 
     if downloader.isDone():
         print("Exporting "+downloader.type+" symbols")
