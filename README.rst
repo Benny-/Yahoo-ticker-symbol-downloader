@@ -42,7 +42,7 @@ in the same working directory to resume downloading.
 
 Example of output:
 
-.. code:: csv
+.. code::
 
     Ticker,Name,Exchange,categoryName,categoryNr
     ENZ,"Enzo Biochem Inc.",NYQ,"Medical Laboratories & Research",525
