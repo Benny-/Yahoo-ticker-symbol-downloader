@@ -8,7 +8,7 @@ class SymbolDownloader:
 
     def __init__(self, type):
         # All downloaded symbols are stored in a dict before exporting
-        # This is to unsure no duplicate data
+        # This is to ensure no duplicate data
         self.symbols = {}
         self.rsession = requests.Session()
         self.type = type
