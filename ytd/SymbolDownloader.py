@@ -1,5 +1,7 @@
 import requests
 import string
+from time import sleep
+import math
 
 from bs4 import BeautifulSoup
 
@@ -72,7 +74,31 @@ class SymbolDownloader:
             self.current_q = self.queries[self._getQueryIndex() + 1]
 
     def nextRequest(self, insecure=False):
-        html = self._fetchHtml(insecure)
+
+        success = False
+        retryCount = 0
+        html = ""
+        # _fetchHtml may raise an exception based on response status or
+        # if the request caused a transport error.
+        # At this point we try a simple exponential back-off algorithm
+        # to attempt 3 more times sleeping 5, 25, 125 seconds
+        # respectively.
+        while(success == False):
+            try:
+                html = self._fetchHtml(insecure)
+                success = True
+            except (requests.HTTPError, requests.exceptions.ChunkedEncodingError) as ex:
+                if retryCount < 3:
+                    attempt = retryCount + 1
+                    sleepAmt = int(math.pow(5,attempt))
+                    print("Retry attempt: " + str(attempt) + "."
+                        " Sleep period: " + str(sleepAmt) + " seconds."
+                        )
+                    sleep(sleepAmt)
+                    retryCount = attempt
+                else:
+                    raise
+
         soup = BeautifulSoup(html)
         symbols = None
 
