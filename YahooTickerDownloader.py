@@ -15,7 +15,6 @@ from ytd.downloader.BondDownloader import BondDownloader
 from ytd.compat import unicode
 
 import tablib
-import bs4
 
 options = {
     "stocks": StockDownloader(),
