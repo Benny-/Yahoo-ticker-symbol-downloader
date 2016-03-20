@@ -68,11 +68,15 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--insecure", help="use HTTP instead of HTTPS", action="store_true")
+    parser.add_argument("-e", "--export", help="export current .pickle file", action="store_true")
     parser.add_argument('type', help='The type to download, this can be: '+" ".join(list(options.keys())))
     args = parser.parse_args()
 
     if args.insecure:
         print("Using insecure connection")
+
+    if args.export:
+        print("Exporting pickle file")
 
     tickerType = args.type = args.type.lower()
 
@@ -90,17 +94,18 @@ def main():
             downloader = options[tickerType]
 
     try:
-        if not downloader.isDone():
-            print("Downloading " + downloader.type)
-            print("")
-            downloadEverything(downloader, tickerType, args.insecure)
-            print ("Saving downloader to disk...")
-            saveDownloader(downloader, tickerType)
-            print ("Downloader successfully saved.")
-            print ("")
-        else:
-            print("The downloader has already finished downloading everything")
-            print("")
+        if not args.export:
+            if not downloader.isDone():
+                print("Downloading " + downloader.type)
+                print("")
+                downloadEverything(downloader, tickerType, args.insecure)
+                print ("Saving downloader to disk...")
+                saveDownloader(downloader, tickerType)
+                print ("Downloader successfully saved.")
+                print ("")
+            else:
+                print("The downloader has already finished downloading everything")
+                print("")
 
     except Exception as ex:
         print("A exception occurred while downloading. Suspending downloader to disk")
@@ -114,7 +119,7 @@ def main():
         print("Suspending downloader to disk")
         saveDownloader(downloader, tickerType)
 
-    if downloader.isDone():
+    if downloader.isDone() or args.export:
         print("Exporting "+downloader.type+" symbols")
 
         data = tablib.Dataset()

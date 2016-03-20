@@ -68,6 +68,10 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
+* Version 0.7.0
+
+  * Added --export option. It will transcode the .pickle file immediately to the desired output formats.
+
 * Version 0.6.0
 
   * Add 3 retries with an exponential back-off if HTTPError or ChunkedEncodingError is raised when processing _fetchHtml.
