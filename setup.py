@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'Yahoo-ticker-downloader',
-    version = '0.7.0',
+    version = '0.8.0',
     author = 'Benny',
     author_email = 'Benny@GMX.it',
     url='https://github.com/Benny-/Yahoo-ticker-symbol-downloader',
@@ -25,7 +25,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Environment :: Console",
         "Topic :: Office/Business :: Financial :: Investment",
-        "License :: Public Domain",
+        "License :: OSI Approved :: BSD License",
     ],
 )
 
