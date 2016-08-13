@@ -99,7 +99,7 @@ class SymbolDownloader:
                 else:
                     raise
 
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html, "html.parser")
         symbols = None
 
         try:
