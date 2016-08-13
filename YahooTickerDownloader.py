@@ -45,10 +45,13 @@ def downloadEverything(downloader, tickerType, insecure):
 
         symbols = downloader.nextRequest(insecure)
         print("Got " + str(len(symbols)) + " downloaded " + downloader.type + " symbols:")
-        if(len(symbols)>2):
-            print (" " + unicode(symbols[0]))
-            print (" " + unicode(symbols[1]))
-            print ("  ect...")
+        if(len(symbols) > 2):
+            try:
+                print (" " + unicode(symbols[0]))
+                print (" " + unicode(symbols[1]))
+                print ("  ect...")
+            except:
+                print (" Could not display some ticker symbols due to char encoding")
         downloader.printProgress()
 
         # Save download state occasionally.

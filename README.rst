@@ -68,6 +68,10 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
+* Version 0.8.1
+
+  * Workaround for #7 : downloading interruption
+
 * Version 0.7.0
 
   * Added --export option. It will transcode the .pickle file immediately to the desired output formats.
