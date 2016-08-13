@@ -131,14 +131,14 @@ def main():
         for symbol in downloader.getCollectedSymbols():
             data.append(symbol.getRow())
 
-        with open(downloader.type + '.csv', 'w') as f:
-            f.write(data.csv)
+        with open(downloader.type + '.csv', 'wb') as f:
+            f.write(data.csv.encode('UTF-8'))
 
-        with open(downloader.type + '.json', 'w') as f:
-            f.write(data.json)
+        with open(downloader.type + '.json', 'wb') as f:
+            f.write(data.json.encode('UTF-8'))
 
-        with open(downloader.type + '.yaml', 'w') as f:
-            f.write(data.yaml)
+        with open(downloader.type + '.yaml', 'wb') as f:
+            f.write(data.yaml.encode('UTF-8'))
 
         with open(downloader.type + '.xls', 'wb') as f:
             f.write(data.xls)
