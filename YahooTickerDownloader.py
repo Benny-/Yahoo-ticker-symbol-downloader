@@ -72,6 +72,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--insecure", help="use HTTP instead of HTTPS", action="store_true")
     parser.add_argument("-e", "--export", help="export current .pickle file", action="store_true")
+    parser.add_argument('-E', '--Exchange', help='Only export ticker symbols from this exchange')
     parser.add_argument('type', help='The type to download, this can be: '+" ".join(list(options.keys())))
     args = parser.parse_args()
 
@@ -129,7 +130,10 @@ def main():
         data.headers = downloader.getRowHeader()
 
         for symbol in downloader.getCollectedSymbols():
-            data.append(symbol.getRow())
+            if(args.Exchange == None):
+                data.append(symbol.getRow())
+            elif (symbol.exchange == args.Exchange):
+                data.append(symbol.getRow())
 
         with open(downloader.type + '.csv', 'wb') as f:
             f.write(data.csv.encode('UTF-8'))

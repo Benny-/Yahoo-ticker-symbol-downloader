@@ -68,6 +68,10 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
+* Version 0.9.0
+
+  * Added a flag to restrict output to specific stock exchanges.
+
 * Version 0.8.1
 
   * Workaround for #7 : downloading interruption
