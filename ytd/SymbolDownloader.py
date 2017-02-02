@@ -27,13 +27,12 @@ class SymbolDownloader:
                 's': self.current_q,
                 't': self.type[0],
                 'm': 'ALL',
-                'r': '',
-                'b': str(self.current_q_item_offset)
+                'b': str(self.current_q_item_offset),
+                'bypass': 'true', # I have no clue what we are bypassing.
             }
-
         protocol = 'http' if insecure else 'https'
         user_agent = {'User-agent': 'yahoo-ticker-symbol-downloader'}
-        req = requests.Request('GET', protocol+'://finance.yahoo.com/lookup/',
+        req = requests.Request('GET', protocol+'://de.finance.yahoo.com/lookup/'+self.type[0],
                 headers=user_agent, params=query_string)
         req = req.prepare()
         print("req " + req.url) # Used for debugging

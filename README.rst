@@ -4,7 +4,6 @@ Yahoo ticker downloader
 Produces .csv, .json, .yaml, and .xls files (All files contain same data in a
 different format) for stocks, ETF, futures, indexes, mutual funds, currency,
 warrants and bonds. The ticker symbol, company name and exchange are saved.
-The category the symbol belongs to is only stored for stock symbols.
 
 It gets its data from `https://finance.yahoo.com/lookup/`_. Please note: it
 is not possible to get all the symbols due to limitations set by Yahoo.
@@ -67,6 +66,12 @@ Download history for symbols: ystockquote_
 
 Changelog
 ---------------------
+
+* Version 0.10.0
+
+  * Removed bond downloading option.
+  * Uses different yahoo source. Fixes #18
+  * Removed python2 from classifiers. Related to #16
 
 * Version 0.9.0
 
