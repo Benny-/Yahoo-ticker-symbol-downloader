@@ -67,6 +67,10 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
+* Version 0.10.1
+
+  * More descriptive help message
+
 * Version 0.10.0
 
   * Removed bond downloading option.

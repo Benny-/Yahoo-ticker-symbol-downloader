@@ -67,8 +67,8 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--insecure", help="use HTTP instead of HTTPS", action="store_true")
-    parser.add_argument("-e", "--export", help="export current .pickle file", action="store_true")
-    parser.add_argument('-E', '--Exchange', help='Only export ticker symbols from this exchange')
+    parser.add_argument("-e", "--export", help="export immediately without downloading (Only usefull if you already downloaded something to the .pickle file)", action="store_true")
+    parser.add_argument('-E', '--Exchange', help='Only export ticker symbols from this exchange (the filtering is done during the export phase)')
     parser.add_argument('type', help='The type to download, this can be: '+" ".join(list(options.keys())))
     args = parser.parse_args()
 
@@ -111,12 +111,12 @@ def main():
         print("A exception occurred while downloading. Suspending downloader to disk")
         saveDownloader(downloader, tickerType)
         print("Successfully saved download state")
-        print("Remove downloader.pickle if this error persists")
+        print("Try removing {type}.pickle file if this error persists")
         print("Issues can be reported on https://github.com/Benny-/Yahoo-ticker-symbol-downloader/issues")
         print("")
         raise
     except KeyboardInterrupt as ex:
-        print("Suspending downloader to disk")
+        print("Suspending downloader to disk as .pickle file")
         saveDownloader(downloader, tickerType)
 
     if downloader.isDone() or args.export:
