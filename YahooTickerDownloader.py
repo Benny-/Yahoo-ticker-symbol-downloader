@@ -14,6 +14,8 @@ from ytd.compat import unicode
 
 import tablib
 
+import sys
+
 options = {
     "stocks": StockDownloader(),
     "etf": ETFDownloader(),
@@ -130,9 +132,12 @@ def main():
                 data.append(symbol.getRow())
             elif (symbol.exchange == args.Exchange):
                 data.append(symbol.getRow())
-
+                
         with open(downloader.type + '.csv', 'wb') as f:
-            f.write(data.csv.encode('UTF-8'))
+            if sys.version_info.major >= 3:
+                f.write(data.csv.decode('UTF-8'))
+            else:
+                f.write(data.csv)
 
         with open(downloader.type + '.json', 'wb') as f:
             f.write(data.json.encode('UTF-8'))
