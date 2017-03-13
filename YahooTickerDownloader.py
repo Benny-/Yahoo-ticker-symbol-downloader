@@ -135,7 +135,10 @@ def main():
                 
         with open(downloader.type + '.csv', 'wb') as f:
             if sys.version_info.major >= 3:
-                f.write(data.csv.decode('UTF-8'))
+                if sys.version_info.major == 3 and sys.version_info.minor < 5:
+                    f.write(data.csv.decode('UTF-8'))
+                else:
+                    f.write(data.csv.encode('UTF-8'))
             else:
                 f.write(data.csv)
 
