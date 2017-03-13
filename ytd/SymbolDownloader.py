@@ -15,12 +15,21 @@ class SymbolDownloader:
         self.rsession = requests.Session()
         self.type = type
 
-        self.queries = string.ascii_lowercase
+        self.queries = []
+        self._add_queries()
         self.current_q = self.queries[0]
         self.current_q_item_offset = 0
         self.current_q_total_items = 'Unknown'  # This field is normally a int
         self.current_page_retries = 0
         self.done = False
+
+    def _add_queries(self, prefix=''):
+        # This method will add (prefix+)a...z to self.queries
+
+        for i in range(len(string.ascii_lowercase)):
+            element = str(prefix) + str(string.ascii_lowercase[i])
+            if element not in self.queries:  # Avoid having duplicates in list
+                self.queries.append(element)
 
     def _fetchHtml(self, insecure):
         query_string = {
@@ -38,6 +47,9 @@ class SymbolDownloader:
         print("req " + req.url) # Used for debugging
         resp = self.rsession.send(req)
         resp.raise_for_status()
+
+        if self.current_q_item_offset > 2000:  # Y! stops returning symbols at offset > 2000, workaround: add finer granulated search query 
+            self._add_queries(self.current_q)
 
         return resp.text
 
