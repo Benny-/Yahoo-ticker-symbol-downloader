@@ -15,7 +15,7 @@ class SymbolDownloader:
         self.rsession = requests.Session()
         self.type = type
 
-        self.queries = string.ascii_lowercase;
+        self.queries = string.ascii_lowercase
         self.current_q = self.queries[0]
         self.current_q_item_offset = 0
         self.current_q_total_items = 'Unknown'  # This field is normally a int
@@ -139,7 +139,7 @@ class SymbolDownloader:
             print("Progress: Done!")
         else:
             print("Progress:" +
-                " Query " + str(self._getQueryIndex()) + "/" + str(self.getTotalQueries()) + "."
+                " Query " + str(self._getQueryIndex()+1) + "/" + str(self.getTotalQueries()) + "."
                 " Items handled in current query: " + str(self.current_q_item_offset) + "/" + str(self.current_q_total_items) + "."
                 " Total collected unique " + self.type + " entries: " + str(len(self.symbols))
                 )
