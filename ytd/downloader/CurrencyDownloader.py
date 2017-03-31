@@ -15,7 +15,7 @@ class CurrencyDownloader(SymbolDownloader):
             if name is not None:
                 name = unicode(name)
             type = row.contents[3].string
-            exchange = row.contents[4].string
+            exchange = row.contents[5].string
             if exchange is not None:
                 exchange = unicode(exchange)
 

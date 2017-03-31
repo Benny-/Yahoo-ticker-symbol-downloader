@@ -67,6 +67,14 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
+* Version 1.0.0-dev
+
+  * Reverted some changes from 0.10.0. Bond is back. Reverted back to english site instead of german.
+  * Resolved CSV issue again. Closes #23 and #16.
+  * Merged #26 Workaround Y! b>2000 limit
+  * Scraper now scrapes a lot more at the expense of runtime.
+  * Support for python2 is back. Latest python 2 & 3 are supported.
+
 * Version 0.10.1
 
   * More descriptive help message

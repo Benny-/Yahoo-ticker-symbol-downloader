@@ -3,6 +3,7 @@
 import pickle
 from time import sleep
 import argparse
+import io
 
 from ytd.downloader.StockDownloader import StockDownloader
 from ytd.downloader.ETFDownloader import ETFDownloader
@@ -10,7 +11,10 @@ from ytd.downloader.FutureDownloader import FutureDownloader
 from ytd.downloader.IndexDownloader import IndexDownloader
 from ytd.downloader.MutualFundDownloader import MutualFundDownloader
 from ytd.downloader.CurrencyDownloader import CurrencyDownloader
+from ytd.downloader.WarrantDownloader import WarrantDownloader
+from ytd.downloader.BondDownloader import BondDownloader
 from ytd.compat import unicode
+from ytd.compat import csv
 
 import tablib
 
@@ -23,6 +27,8 @@ options = {
     "index": IndexDownloader(),
     "mutualfund": MutualFundDownloader(),
     "currency": CurrencyDownloader(),
+    "warrant": WarrantDownloader(),
+    "bond": BondDownloader(),
 }
 
 
@@ -133,14 +139,13 @@ def main():
             elif (symbol.exchange == args.Exchange):
                 data.append(symbol.getRow())
                 
-        with open(downloader.type + '.csv', 'wb') as f:
-            if sys.version_info.major >= 3:
-                if sys.version_info.major == 3 and sys.version_info.minor < 5:
-                    f.write(data.csv.decode('UTF-8'))
-                else:
-                    f.write(data.csv.encode('UTF-8'))
-            else:
-                f.write(data.csv)
+        with io.open(downloader.type + '.csv', 'w', encoding='utf-8') as f:
+            f.write(str.join(',', data.headers) + '\n')
+            writer = csv.writer(f)
+            for i in range(0, len(data)):
+                row = [unicode(y) for y in data[i]]
+                print(row)
+                writer.writerow(row)
 
         with open(downloader.type + '.json', 'wb') as f:
             f.write(data.json.encode('UTF-8'))

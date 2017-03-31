@@ -41,11 +41,14 @@ class SymbolDownloader:
             }
         protocol = 'http' if insecure else 'https'
         user_agent = {'User-agent': 'yahoo-ticker-symbol-downloader'}
-        req = requests.Request('GET', protocol+'://de.finance.yahoo.com/lookup/'+self.type[0],
-                headers=user_agent, params=query_string)
+        req = requests.Request('GET',
+                protocol+'://finance.yahoo.com/lookup/'+self.type[0],
+                headers=user_agent,
+                params=query_string
+                )
         req = req.prepare()
-        print("req " + req.url) # Used for debugging
-        resp = self.rsession.send(req)
+        print("req " + req.url)
+        resp = self.rsession.send(req, timeout=(12, 12))
         resp.raise_for_status()
 
         if self.current_q_item_offset > 2000:  # Y! stops returning symbols at offset > 2000, workaround: add finer granulated search query 
@@ -98,7 +101,9 @@ class SymbolDownloader:
             try:
                 html = self._fetchHtml(insecure)
                 success = True
-            except (requests.HTTPError, requests.exceptions.ChunkedEncodingError) as ex:
+            except (requests.HTTPError,
+                    requests.exceptions.ChunkedEncodingError,
+                    requests.exceptions.ReadTimeout) as ex:
                 if retryCount < 3:
                     attempt = retryCount + 1
                     sleepAmt = int(math.pow(5,attempt))
@@ -117,7 +122,7 @@ class SymbolDownloader:
             # A exception is thrown here for the following reasons:
             # 1. Yahoo does not include a table (or any results!) if you
             #    request items at offset 2020 or more
-            # 2. Yahoo randomly screws a http request up and table is missing.
+            # 2. Yahoo randomly screws a http request up and table is missing (a bad page).
             #    A succesive http request might not result in a exception here.
             symbolsContainer = soup.find("table", {"class": "yui-dt"}).tbody
             symbols = self.decodeSymbolsContainer(symbolsContainer)
@@ -131,6 +136,12 @@ class SymbolDownloader:
         self.current_q_total_items = self._getTotalItemsFromSoup(soup)
         if len(symbols) == 0:
             self.current_page_retries += 1
+            # Related to issue #4
+            # See https://github.com/Benny-/Yahoo-ticker-symbol-downloader/issues/4#issuecomment-51718922
+            # Yahoo sometimes gives a "bad" page. There is no way we can determine if we are
+            # At the end of pagination or if we happen to get a bad page a few times in a row.
+            # So we simply request the page a lot of times. At some point we are fairly certain
+            # we are at end of pagination.
             if self.current_page_retries > 20:
                 self._nextQuery()
         else:

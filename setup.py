@@ -4,8 +4,8 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'Yahoo-ticker-downloader',
-    version = '0.10.1',
-    author = 'Benny',
+    version = '1.0.0',
+    author = 'Benny Jacobs',
     author_email = 'Benny@GMX.it',
     url='https://github.com/Benny-/Yahoo-ticker-symbol-downloader',
     license='BSD3',
@@ -18,9 +18,12 @@ setup(
         "beautifulsoup4 >= 4.2.1",
         "requests >= 2.2.1",
         "tablib >= 0.9.11",
+        "backports.csv >= 1.0.4",
     ],
     classifiers=[
         "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Environment :: Console",
         "Topic :: Office/Business :: Financial :: Investment",
