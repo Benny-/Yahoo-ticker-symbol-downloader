@@ -13,7 +13,7 @@ from ytd.downloader.MutualFundDownloader import MutualFundDownloader
 from ytd.downloader.CurrencyDownloader import CurrencyDownloader
 from ytd.downloader.WarrantDownloader import WarrantDownloader
 from ytd.downloader.BondDownloader import BondDownloader
-from ytd.compat import unicode
+from ytd.compat import text
 from ytd.compat import csv
 
 import tablib
@@ -42,17 +42,17 @@ def saveDownloader(downloader, tickerType):
         pickle.dump(downloader, file=f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def downloadEverything(downloader, tickerType, insecure):
+def downloadEverything(downloader, tickerType, insecure, sleeptime, pandantic):
 
     loop = 0
     while not downloader.isDone():
 
-        symbols = downloader.nextRequest(insecure)
+        symbols = downloader.nextRequest(insecure, pandantic)
         print("Got " + str(len(symbols)) + " downloaded " + downloader.type + " symbols:")
         if(len(symbols) > 2):
             try:
-                print (" " + unicode(symbols[0]))
-                print (" " + unicode(symbols[1]))
+                print (" " + text(symbols[0]))
+                print (" " + text(symbols[1]))
                 print ("  ect...")
             except:
                 print (" Could not display some ticker symbols due to char encoding")
@@ -68,7 +68,7 @@ def downloadEverything(downloader, tickerType, insecure):
             print ("")
 
         if not downloader.isDone():
-            sleep(5)  # So we don't overload the server.
+            sleep(sleeptime)  # So we don't overload the server.
 
 def main():
     downloader = None
@@ -78,6 +78,8 @@ def main():
     parser.add_argument("-e", "--export", help="export immediately without downloading (Only usefull if you already downloaded something to the .pickle file)", action="store_true")
     parser.add_argument('-E', '--Exchange', help='Only export ticker symbols from this exchange (the filtering is done during the export phase)')
     parser.add_argument('type', help='The type to download, this can be: '+" ".join(list(options.keys())))
+    parser.add_argument("-s", "--sleep", help="The time to sleep in seconds between requests", type=float, default=5.0)
+    parser.add_argument("-p", "--pandantic", help="Stop and warn the user if some rare assertion fails", action="store_true")
     args = parser.parse_args()
 
     if args.insecure:
@@ -106,7 +108,7 @@ def main():
             if not downloader.isDone():
                 print("Downloading " + downloader.type)
                 print("")
-                downloadEverything(downloader, tickerType, args.insecure)
+                downloadEverything(downloader, tickerType, args.insecure, args.sleep, args.pandantic)
                 print ("Saving downloader to disk...")
                 saveDownloader(downloader, tickerType)
                 print ("Downloader successfully saved.")
@@ -143,7 +145,7 @@ def main():
             f.write(str.join(',', data.headers) + '\n')
             writer = csv.writer(f)
             for i in range(0, len(data)):
-                row = [unicode(y) for y in data[i]]
+                row = [text(y) for y in data[i]]
                 print(row)
                 writer.writerow(row)
 

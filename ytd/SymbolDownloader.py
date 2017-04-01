@@ -3,6 +3,8 @@ import string
 from time import sleep
 import math
 
+from ytd.compat import text
+
 from bs4 import BeautifulSoup
 
 class SymbolDownloader:
@@ -20,6 +22,8 @@ class SymbolDownloader:
         self.current_q = self.queries[0]
         self.current_q_item_offset = 0
         self.current_q_total_items = 'Unknown'  # This field is normally a int
+        self.query_done = 0
+        self.query_done_max = 3
         self.current_page_retries = 0
         self.done = False
 
@@ -80,15 +84,22 @@ class SymbolDownloader:
         self.current_page_retries = 0
         self.current_q_item_offset = 0
         self.current_q_total_items = 'Unknown'
+        self.query_done = 0
 
         if self._getQueryIndex() + 1 >= len(self.queries):
             self.current_q = self.queries[0]
-            self.done = True
         else:
             self.current_q = self.queries[self._getQueryIndex() + 1]
 
-    def nextRequest(self, insecure=False):
-
+    def nextRequest(self, insecure=False, pandantic=False):
+    
+        # You would expect query_done to be a boolean.
+        # But unfortunaly we can't depend on Yahoo telling use if there
+        # are any more entries. Only if yahoo tells us x amount of times in
+        # succession they are done will we actually go on to the next query.
+        if(self.query_done >= self.query_done_max):
+            self._nextQuery()
+    
         success = False
         retryCount = 0
         html = ""
@@ -103,7 +114,8 @@ class SymbolDownloader:
                 success = True
             except (requests.HTTPError,
                     requests.exceptions.ChunkedEncodingError,
-                    requests.exceptions.ReadTimeout) as ex:
+                    requests.exceptions.ReadTimeout,
+                    requests.exceptions.ConnectionError) as ex:
                 if retryCount < 3:
                     attempt = retryCount + 1
                     sleepAmt = int(math.pow(5,attempt))
@@ -126,14 +138,42 @@ class SymbolDownloader:
             #    A succesive http request might not result in a exception here.
             symbolsContainer = soup.find("table", {"class": "yui-dt"}).tbody
             symbols = self.decodeSymbolsContainer(symbolsContainer)
+        except TypeError as ex:
+            # TypeError should be thrown in the different downloaders like MutualFundDownloader.py
+            # It should be a sanity check to make sure we download the correct type.
+            # But for some reason Yahoo consistently gives back some incorrect types.
+            # Search for Mutual Fund and 1 out of the 20 are ETF's.
+            # I am not sure what is going on.
+            # At the moment the sanity checks have been disabled in the different downloaders.
+            raise
         except:
             symbols = []
 
         for symbol in symbols:
             self.symbols[symbol.ticker] = symbol
 
-        self.current_q_item_offset = self.current_q_item_offset + len(symbols)
-        self.current_q_total_items = self._getTotalItemsFromSoup(soup)
+        current_q_item_offset = self.current_q_item_offset + len(symbols)
+        current_q_total_items = self._getTotalItemsFromSoup(soup)
+        
+        if(current_q_total_items != 'Unknown'):
+            if(current_q_item_offset == current_q_total_items):
+                self.query_done = self.query_done + 1
+            elif(current_q_item_offset > current_q_total_items and pandantic):
+                # This happens rarely for multiple requests to the same url
+                # Output is garanteed to be inconsistent between runs.
+                raise Exception("Funny things are happening: current_q_item_offset "
+                                + text(current_q_item_offset)
+                                + " > "
+                                + text(self.current_q_total_items)
+                                + " current_q_total_items. HTML:"
+                                + "\n"
+                                + text(html))
+            else:
+                self.query_done = 0
+        
+        self.current_q_item_offset = current_q_item_offset
+        self.current_q_total_items = current_q_total_items
+        
         if len(symbols) == 0:
             self.current_page_retries += 1
             # Related to issue #4
@@ -143,9 +183,16 @@ class SymbolDownloader:
             # So we simply request the page a lot of times. At some point we are fairly certain
             # we are at end of pagination.
             if self.current_page_retries > 20:
-                self._nextQuery()
+                self.query_done = self.query_done + self.query_done_max
         else:
             self.current_page_retries = 0
+            
+        if(self.query_done >= self.query_done_max):
+            if self._getQueryIndex() >= len(self.queries):
+                self.done = True
+            else:
+                self.done = False
+        
         return symbols
 
     def isDone(self):
@@ -161,9 +208,10 @@ class SymbolDownloader:
         if self.isDone():
             print("Progress: Done!")
         else:
-            print("Progress:" +
-                " Query " + str(self._getQueryIndex()+1) + "/" + str(self.getTotalQueries()) + "."
-                " Items handled in current query: " + str(self.current_q_item_offset) + "/" + str(self.current_q_total_items) + "."
-                " Total collected unique " + self.type + " entries: " + str(len(self.symbols))
+            print("Progress:"
+                + " Query " + str(self._getQueryIndex()+1) + "/" + str(self.getTotalQueries()) + "."
+                + " Items handled in current query: " + str(self.current_q_item_offset) + "/" + str(self.current_q_total_items) + "."
+                + "\n"
+                + str(len(self.symbols)) + " unique " + self.type + " entries collected so far."
                 )
         print ("")

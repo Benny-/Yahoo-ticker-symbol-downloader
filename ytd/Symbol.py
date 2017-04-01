@@ -1,4 +1,4 @@
-from .compat import is_py3, unicode
+from .compat import is_py3, text
 
 class Symbol:
     """Abstract class"""
@@ -14,7 +14,8 @@ class Symbol:
         return [self.ticker, self.name, self.exchange]
 
     def __unicode__(self):
-        return "" + self.getType() + " " + self.ticker + " " + unicode(self.exchange) + " " + unicode(self.name)
+        return u"" + self.getType() + " " + self.ticker + " " + text(self.exchange) + " " + text(self.name)
 
 if is_py3:
     Symbol.__str__ = Symbol.__unicode__
+
