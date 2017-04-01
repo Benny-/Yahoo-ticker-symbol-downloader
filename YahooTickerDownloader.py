@@ -75,7 +75,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--insecure", help="use HTTP instead of HTTPS", action="store_true")
-    parser.add_argument("-e", "--export", help="export immediately without downloading (Only usefull if you already downloaded something to the .pickle file)", action="store_true")
+    parser.add_argument("-e", "--export", help="export immediately without downloading (Only useful if you already downloaded something to the .pickle file)", action="store_true")
     parser.add_argument('-E', '--Exchange', help='Only export ticker symbols from this exchange (the filtering is done during the export phase)')
     parser.add_argument('type', help='The type to download, this can be: '+" ".join(list(options.keys())))
     parser.add_argument("-s", "--sleep", help="The time to sleep in seconds between requests", type=float, default=0)

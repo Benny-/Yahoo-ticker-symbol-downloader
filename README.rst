@@ -8,8 +8,14 @@ warrants and bonds. The ticker symbol, company name and exchange are saved.
 It gets its data from `https://finance.yahoo.com/lookup/`_. Please note: it
 is not possible to get all the symbols due to limitations set by Yahoo.
 About 75%-90% of all symbols are gathered using this script depending on type.
+It may take days for the script to complete.
 
-Installation
+Requirements
+---------------------
+
+Python 2.7 or Python 3.5+
+
+Install
 ---------------------
 
 From python package manager (preferred):
@@ -24,8 +30,34 @@ From source:
 
     python setup.py install
 
-Running
+Example Usage
 ---------------------
+
+.. code:: bash
+
+        YahooTickerDownloader.py --help
+        
+.. code::
+
+    usage: YahooTickerDownloader.py [-h] [-i] [-e] [-E EXCHANGE] [-s SLEEP] [-p]
+                                    type
+
+    positional arguments:
+      type                  The type to download, this can be: mutualfund index
+                            bond etf warrant stocks future currency
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -i, --insecure        use HTTP instead of HTTPS
+      -e, --export          export immediately without downloading (Only useful
+                            if you already downloaded something to the .pickle
+                            file)
+      -E EXCHANGE, --Exchange EXCHANGE
+                            Only export ticker symbols from this exchange (the
+                            filtering is done during the export phase)
+      -s SLEEP, --sleep SLEEP
+                            The time to sleep in seconds between requests
+      -p, --pandantic       Stop and warn the user if some rare assertion fails
 
 The first param is one of the following types: ``stocks`` ``etf``
 ``future`` ``index`` ``mutualfund`` ``currency`` ``warrant`` ``bond``
@@ -34,12 +66,13 @@ The first param is one of the following types: ``stocks`` ``etf``
 
     YahooTickerDownloader.py stocks
 
-The program takes several hours before any output is generated.
+The program takes several days before it is finished.
 The program supports suspending and resuming a download.
 Press CTRL+C to suspend download. Restart the program
 in the same working directory to resume downloading.
+It is possible to export a partially downloaded results using the -e flag.
 
-Example of output:
+Example of csv output:
 
 .. code::
 
@@ -56,7 +89,7 @@ Example of output:
     KNDI,"Kandi Technologies, Corp",NGM,"Auto Manufacturers - Major",330
     ...ect
 
-Depending on the type you are downloading, you will between 3.000 and 26.000
+Depending on the type you are downloading, you will get between 3.000 and 100.000+
 entries.
 
 Further resources
