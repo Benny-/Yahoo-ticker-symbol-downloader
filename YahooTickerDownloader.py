@@ -78,7 +78,7 @@ def main():
     parser.add_argument("-e", "--export", help="export immediately without downloading (Only usefull if you already downloaded something to the .pickle file)", action="store_true")
     parser.add_argument('-E', '--Exchange', help='Only export ticker symbols from this exchange (the filtering is done during the export phase)')
     parser.add_argument('type', help='The type to download, this can be: '+" ".join(list(options.keys())))
-    parser.add_argument("-s", "--sleep", help="The time to sleep in seconds between requests", type=float, default=5.0)
+    parser.add_argument("-s", "--sleep", help="The time to sleep in seconds between requests", type=float, default=0)
     parser.add_argument("-p", "--pandantic", help="Stop and warn the user if some rare assertion fails", action="store_true")
     args = parser.parse_args()
 
@@ -142,11 +142,10 @@ def main():
                 data.append(symbol.getRow())
                 
         with io.open(downloader.type + '.csv', 'w', encoding='utf-8') as f:
-            f.write(str.join(',', data.headers) + '\n')
+            f.write(text.join(u',', data.headers) + '\n')
             writer = csv.writer(f)
             for i in range(0, len(data)):
                 row = [text(y) for y in data[i]]
-                print(row)
                 writer.writerow(row)
 
         with open(downloader.type + '.json', 'wb') as f:

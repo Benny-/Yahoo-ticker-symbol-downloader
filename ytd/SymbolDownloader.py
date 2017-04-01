@@ -138,6 +138,8 @@ class SymbolDownloader:
             #    A succesive http request might not result in a exception here.
             symbolsContainer = soup.find("table", {"class": "yui-dt"}).tbody
             symbols = self.decodeSymbolsContainer(symbolsContainer)
+        except KeyboardInterrupt as ex:
+            raise
         except TypeError as ex:
             # TypeError should be thrown in the different downloaders like MutualFundDownloader.py
             # It should be a sanity check to make sure we download the correct type.
