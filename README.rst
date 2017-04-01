@@ -32,10 +32,6 @@ From source:
 
 Example Usage
 ---------------------
-
-.. code:: bash
-
-        YahooTickerDownloader.py --help
         
 .. code::
 
@@ -59,8 +55,10 @@ Example Usage
                             The time to sleep in seconds between requests
       -p, --pandantic       Stop and warn the user if some rare assertion fails
 
-The first param is one of the following types: ``stocks`` ``etf``
+The first positional argument must be one of the following: ``stocks`` ``etf``
 ``future`` ``index`` ``mutualfund`` ``currency`` ``warrant`` ``bond``
+
+For example to download all stock symbols you run it like:
 
 .. code:: bash
 
@@ -72,7 +70,7 @@ Press CTRL+C to suspend download. Restart the program
 in the same working directory to resume downloading.
 It is possible to export a partially downloaded results using the -e flag.
 
-Example of csv output:
+Example of CSV output:
 
 .. code::
 
