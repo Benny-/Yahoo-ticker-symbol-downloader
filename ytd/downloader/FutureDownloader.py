@@ -16,7 +16,7 @@ class FutureDownloader(SymbolDownloader):
                 name = text(name)
             t = text(row.contents[3].string)
             if(t.strip().lower() != 'Future'.lower()):
-                raise TypeError("Unexpected type. Got: " + t)
+                pass #raise TypeError("Unexpected type. Got: " + t)
             exchange = row.contents[5].string
             if exchange is not None:
                 exchange = text(exchange)

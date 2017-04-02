@@ -154,8 +154,5 @@ def main():
         with open(downloader.type + '.yaml', 'wb') as f:
             f.write(data.yaml.encode('UTF-8'))
 
-        with open(downloader.type + '.xls', 'wb') as f:
-            f.write(data.xls)
-
 if __name__ == "__main__":
     main()

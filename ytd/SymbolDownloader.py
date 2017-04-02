@@ -136,17 +136,18 @@ class SymbolDownloader:
             #    request items at offset 2020 or more
             # 2. Yahoo randomly screws a http request up and table is missing (a bad page).
             #    A succesive http request might not result in a exception here.
+            # 3. A TypeError is raised. This is disabled for now.
+            #    TypeError should be thrown in the different downloaders like MutualFundDownloader.py
+            #    It should be a sanity check to make sure we download the correct type.
+            #    But for some reason Yahoo consistently gives back some incorrect types.
+            #    Search for Mutual Fund and 1 out of the 20 are ETF's.
+            #    I am not sure what is going on.
+            #    At the moment the sanity checks have been disabled in the different downloaders.
             symbolsContainer = soup.find("table", {"class": "yui-dt"}).tbody
             symbols = self.decodeSymbolsContainer(symbolsContainer)
         except KeyboardInterrupt as ex:
             raise
         except TypeError as ex:
-            # TypeError should be thrown in the different downloaders like MutualFundDownloader.py
-            # It should be a sanity check to make sure we download the correct type.
-            # But for some reason Yahoo consistently gives back some incorrect types.
-            # Search for Mutual Fund and 1 out of the 20 are ETF's.
-            # I am not sure what is going on.
-            # At the moment the sanity checks have been disabled in the different downloaders.
             raise
         except:
             symbols = []
@@ -190,7 +191,7 @@ class SymbolDownloader:
             self.current_page_retries = 0
             
         if(self.query_done >= self.query_done_max):
-            if self._getQueryIndex() >= len(self.queries):
+            if self._getQueryIndex() + 1 >= len(self.queries):
                 self.done = True
             else:
                 self.done = False
