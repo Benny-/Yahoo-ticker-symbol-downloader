@@ -1,7 +1,7 @@
 Yahoo ticker downloader
 =======================
 
-Produces .csv, .json and .yaml files (All files contain same data but in a
+Produces .csv, .xlsx, .json and .yaml files (All files contain same data but in a
 different format) for stocks, ETF, futures, indexes, mutual funds, currency,
 warrants and bonds. The ticker symbol, company name and exchange are saved for
 all symbols. The stock symbols also have a category name.
@@ -106,6 +106,8 @@ Changelog
   * Scraper now scrapes a lot more at the expense of runtime.
   * Support for python2 is back. Latest python 2 & 3 are supported.
   * Disabled excel output (exporter could not handle huge amount of data)
+  * Removed xls support
+  * Added xlsx support (#29)
 
 * Version 0.10.1
 

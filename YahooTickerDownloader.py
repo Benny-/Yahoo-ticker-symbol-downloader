@@ -145,8 +145,11 @@ def main():
             f.write(text.join(u',', data.headers) + '\n')
             writer = csv.writer(f)
             for i in range(0, len(data)):
-                row = [text(y) for y in data[i]]
+                row = [text(y) if not y is None else u"" for y in data[i]]
                 writer.writerow(row)
+
+        with open(downloader.type + '.xlsx', 'wb') as f:
+            f.write(data.xlsx)
 
         with open(downloader.type + '.json', 'wb') as f:
             f.write(data.json.encode('UTF-8'))
