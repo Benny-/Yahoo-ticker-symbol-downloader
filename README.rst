@@ -98,7 +98,7 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
-* Version 1.0.0-dev
+* Version 1.0.0 (2017-04-04)
 
   * Reverted some changes from 0.10.0. Bond is back. Reverted back to English site instead of German.
   * Resolved CSV issue again. Closes #23 and #16.
@@ -109,44 +109,44 @@ Changelog
   * Removed xls support
   * Added xlsx support (#29)
 
-* Version 0.10.1
+* Version 0.10.1 (2017-02-04)
 
   * More descriptive help message
 
-* Version 0.10.0
+* Version 0.10.0 (2017-02-02)
 
   * Removed bond downloading option.
   * Uses different yahoo source. Fixes #18
   * Removed python2 from classifiers. Related to #16
 
-* Version 0.9.0
+* Version 0.9.0 (unreleased)
 
   * Added a flag to restrict output to specific stock exchanges.
 
-* Version 0.8.1
+* Version 0.8.1 (2016-08-17)
 
   * Workaround for #7 : downloading interruption
   * Solution for #9 : UnicodeEncodeError
   
-* Version 0.7.0
+* Version 0.7.0 (2016-03-20)
 
   * Added --export option. It will transcode the .pickle file immediately to the desired output formats.
 
-* Version 0.6.0
+* Version 0.6.0 (unreleased)
 
   * Add 3 retries with an exponential back-off if HTTPError or ChunkedEncodingError is raised when processing _fetchHtml.
 
-* Version 0.5.0
+* Version 0.5.0 (2015-08-16)
 
   * Allows downloading using a insecure connection.
   * The temporarily download file-names now include the ticker type.
 
-* Version 0.4.0
+* Version 0.4.0 (2014-10-28)
 
   * Warrant symbols can now be downloaded.
   * Bond symbols can now be downloaded.
 
-* Version 0.3.0
+* Version 0.3.0 (2014-08-14)
 
   * Use HTTPS instead of HTTP
   * Retry to fetch a page if it contains no symbols (A "fix" for issue #4)
