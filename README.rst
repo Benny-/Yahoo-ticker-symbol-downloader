@@ -98,6 +98,10 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
+* Version 1.0.1-dev (????-??-??)
+
+  * Higher version
+
 * Version 1.0.0 (2017-04-04)
 
   * Reverted some changes from 0.10.0. Bond is back. Reverted back to English site instead of German.
@@ -105,7 +109,6 @@ Changelog
   * Merged #26 Workaround Y! b>2000 limit
   * Scraper now scrapes a lot more at the expense of runtime.
   * Support for python2 is back. Latest python 2 & 3 are supported.
-  * Disabled excel output (exporter could not handle huge amount of data)
   * Removed xls support
   * Added xlsx support (#29)
 
