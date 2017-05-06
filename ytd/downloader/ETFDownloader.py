@@ -5,22 +5,19 @@ from ..compat import text
 
 class ETFDownloader(SymbolDownloader):
     def __init__(self):
-        SymbolDownloader.__init__(self, "ETF")
+        SymbolDownloader.__init__(self, "etfs")
 
-    def decodeSymbolsContainer(self, symbolsContainer):
+    def decodeSymbolsContainer(self, json):
         symbols = []
-        for row in symbolsContainer:
-            ticker = text(row.contents[0].string)
-            name = row.contents[1].string
-            if name is not None:
-                name = text(name)
-            t = text(row.contents[3].string)
-            if(t.strip().lower() != 'ETF'.lower()):
-                pass # raise TypeError("Unexpected type. Got: " + t)
-            exchange = row.contents[5].string
-            if exchange is not None:
-                exchange = text(exchange)
-            
-            symbols.append(ETF(ticker, name, exchange))
-        return symbols
+        count = None
 
+        for row in json['data']['result']:
+            ticker = text(row['symbol'])
+            name = row['companyName']
+            exchange = row['exchange']
+            symbols.append(Currency(ticker, name, exchange))
+
+        if ('E' in json['data']['hits']):
+            count = int(json['data']['hits']['E']['count'])
+
+        return (symbols, count)

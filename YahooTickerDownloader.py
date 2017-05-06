@@ -11,8 +11,6 @@ from ytd.downloader.FutureDownloader import FutureDownloader
 from ytd.downloader.IndexDownloader import IndexDownloader
 from ytd.downloader.MutualFundDownloader import MutualFundDownloader
 from ytd.downloader.CurrencyDownloader import CurrencyDownloader
-from ytd.downloader.WarrantDownloader import WarrantDownloader
-from ytd.downloader.BondDownloader import BondDownloader
 from ytd.compat import text
 from ytd.compat import csv
 
@@ -27,8 +25,6 @@ options = {
     "index": IndexDownloader(),
     "mutualfund": MutualFundDownloader(),
     "currency": CurrencyDownloader(),
-    "warrant": WarrantDownloader(),
-    "bond": BondDownloader(),
 }
 
 
@@ -140,7 +136,7 @@ def main():
                 data.append(symbol.getRow())
             elif (symbol.exchange == args.Exchange):
                 data.append(symbol.getRow())
-                
+
         with io.open(downloader.type + '.csv', 'w', encoding='utf-8') as f:
             f.write(text.join(u',', data.headers) + '\n')
             writer = csv.writer(f)

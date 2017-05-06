@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'Yahoo-ticker-downloader',
-    version = '1.0.0',
+    version = '2.0.0',
     author = 'Benny Jacobs',
     author_email = 'Benny@GMX.it',
     url='https://github.com/Benny-/Yahoo-ticker-symbol-downloader',
@@ -15,7 +15,6 @@ setup(
     packages = find_packages(),
     scripts = ['YahooTickerDownloader.py'],
     install_requires=[
-        "beautifulsoup4 >= 4.2.1",
         "requests >= 2.2.1",
         "tablib >= 0.9.11",
         "backports.csv >= 1.0.4",

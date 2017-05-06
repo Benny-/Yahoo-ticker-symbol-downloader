@@ -5,22 +5,19 @@ from ..compat import text
 
 class FutureDownloader(SymbolDownloader):
     def __init__(self):
-        SymbolDownloader.__init__(self, "Future")
+        SymbolDownloader.__init__(self, "futures")
 
-    def decodeSymbolsContainer(self, symbolsContainer):
+    def decodeSymbolsContainer(self, json):
         symbols = []
-        for row in symbolsContainer:
-            ticker = text(row.contents[0].string)
-            name = row.contents[1].string
-            if name is not None:
-                name = text(name)
-            t = text(row.contents[3].string)
-            if(t.strip().lower() != 'Future'.lower()):
-                pass #raise TypeError("Unexpected type. Got: " + t)
-            exchange = row.contents[5].string
-            if exchange is not None:
-                exchange = text(exchange)
-            
-            symbols.append(Future(ticker, name, exchange))
-        return symbols
+        count = 0
 
+        for row in json['data']['result']:
+            ticker = text(row['symbol'])
+            name = row['companyName']
+            exchange = row['exchange']
+            symbols.append(Currency(ticker, name, exchange))
+
+        if ('F' in json['data']['hits']):
+            count = int(json['data']['hits']['F']['count'])
+
+        return (symbols, count)

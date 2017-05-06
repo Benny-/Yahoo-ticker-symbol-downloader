@@ -4,8 +4,7 @@ from time import sleep
 import math
 
 from ytd.compat import text
-
-from bs4 import BeautifulSoup
+from ytd.compat import quote
 
 class SymbolDownloader:
     """Abstract class"""
@@ -35,30 +34,39 @@ class SymbolDownloader:
             if element not in self.queries:  # Avoid having duplicates in list
                 self.queries.append(element)
 
-    def _fetchHtml(self, insecure):
+    def _encodeParams(self, params):
+        encoded = ''
+        for key, value in params.items():
+            encoded += ';' + quote(key) + '=' + quote(text(value))
+        return encoded
+
+    def _fetch(self, insecure):
+        params = {
+            'b': text(self.current_q_item_offset),
+            's': self.current_q,
+            't': self.type[0].upper(),
+            'p': 1,
+        }
         query_string = {
-                's': self.current_q,
-                't': self.type[0],
-                'm': 'ALL',
-                'b': str(self.current_q_item_offset),
-                'bypass': 'true', # I have no clue what we are bypassing.
-            }
+            'device': 'console',
+            'returnMeta': 'true',
+        }
         protocol = 'http' if insecure else 'https'
         user_agent = {'User-agent': 'yahoo-ticker-symbol-downloader'}
         req = requests.Request('GET',
-                protocol+'://finance.yahoo.com/lookup/'+self.type[0],
-                headers=user_agent,
-                params=query_string
-                )
+            protocol+'://finance.yahoo.com/_finance_doubledown/api/resource/finance.yfinlist.symbol_lookup'+self._encodeParams(params),
+            headers=user_agent,
+            params=query_string
+        )
         req = req.prepare()
         print("req " + req.url)
         resp = self.rsession.send(req, timeout=(12, 12))
         resp.raise_for_status()
 
-        if self.current_q_item_offset > 2000:  # Y! stops returning symbols at offset > 2000, workaround: add finer granulated search query 
+        if self.current_q_item_offset > 2000:  # Y! stops returning symbols at offset > 2000, workaround: add finer granulated search query
             self._add_queries(self.current_q)
 
-        return resp.text
+        return resp.json()
 
     def decodeSymbolsContainer(self, symbolsContainer):
         raise Exception("Function to extract symbols must be overwritten in subclass. Generic symbol downloader does not know how.")
@@ -68,17 +76,6 @@ class SymbolDownloader:
 
     def getTotalQueries(self):
         return len(self.queries)
-
-    def _getTotalItemsFromSoup(self, soup):
-        total_items = None
-        try:
-            div = soup.find(id="pagination")
-            yikkes = str(div).split("of")[1].split("|")[0]
-            yikkes = "".join([char for char in yikkes if char in string.digits])
-            total_items = int(yikkes)
-        except Exception as ex:
-            total_items = 'Unknown'
-        return total_items
 
     def _nextQuery(self):
         self.current_page_retries = 0
@@ -92,25 +89,23 @@ class SymbolDownloader:
             self.current_q = self.queries[self._getQueryIndex() + 1]
 
     def nextRequest(self, insecure=False, pandantic=False):
-    
+
         # You would expect query_done to be a boolean.
         # But unfortunaly we can't depend on Yahoo telling use if there
         # are any more entries. Only if yahoo tells us x amount of times in
         # succession they are done will we actually go on to the next query.
         if(self.query_done >= self.query_done_max):
             self._nextQuery()
-    
+
         success = False
         retryCount = 0
-        html = ""
-        # _fetchHtml may raise an exception based on response status or
-        # if the request caused a transport error.
-        # At this point we try a simple exponential back-off algorithm
+        json = None
+        # Eponential back-off algorithm
         # to attempt 3 more times sleeping 5, 25, 125 seconds
         # respectively.
         while(success == False):
             try:
-                html = self._fetchHtml(insecure)
+                json = self._fetch(insecure)
                 success = True
             except (requests.HTTPError,
                     requests.exceptions.ChunkedEncodingError,
@@ -127,56 +122,31 @@ class SymbolDownloader:
                 else:
                     raise
 
-        soup = BeautifulSoup(html, "html.parser")
-        symbols = None
-
-        try:
-            # A exception is thrown here for the following reasons:
-            # 1. Yahoo does not include a table (or any results!) if you
-            #    request items at offset 2020 or more
-            # 2. Yahoo randomly screws a http request up and table is missing (a bad page).
-            #    A succesive http request might not result in a exception here.
-            # 3. A TypeError is raised. This is disabled for now.
-            #    TypeError should be thrown in the different downloaders like MutualFundDownloader.py
-            #    It should be a sanity check to make sure we download the correct type.
-            #    But for some reason Yahoo consistently gives back some incorrect types.
-            #    Search for Mutual Fund and 1 out of the 20 are ETF's.
-            #    I am not sure what is going on.
-            #    At the moment the sanity checks have been disabled in the different downloaders.
-            symbolsContainer = soup.find("table", {"class": "yui-dt"}).tbody
-            symbols = self.decodeSymbolsContainer(symbolsContainer)
-        except KeyboardInterrupt as ex:
-            raise
-        except TypeError as ex:
-            raise
-        except:
-            symbols = []
+        (symbols, count) = self.decodeSymbolsContainer(json)
 
         for symbol in symbols:
             self.symbols[symbol.ticker] = symbol
 
         current_q_item_offset = self.current_q_item_offset + len(symbols)
-        current_q_total_items = self._getTotalItemsFromSoup(soup)
-        
-        if(current_q_total_items != 'Unknown'):
-            if(current_q_item_offset == current_q_total_items):
-                self.query_done = self.query_done + 1
-            elif(current_q_item_offset > current_q_total_items and pandantic):
-                # This happens rarely for multiple requests to the same url
-                # Output is garanteed to be inconsistent between runs.
-                raise Exception("Funny things are happening: current_q_item_offset "
-                                + text(current_q_item_offset)
-                                + " > "
-                                + text(self.current_q_total_items)
-                                + " current_q_total_items. HTML:"
-                                + "\n"
-                                + text(html))
-            else:
-                self.query_done = 0
-        
+        current_q_total_items = count
+
+        if(current_q_item_offset == current_q_total_items):
+            self.query_done = self.query_done + 1
+        elif(current_q_item_offset > current_q_total_items and pandantic):
+            # This should never happen now that we are using the a JSON API
+            raise Exception("Funny things are happening: current_q_item_offset "
+                            + text(current_q_item_offset)
+                            + " > "
+                            + text(self.current_q_total_items)
+                            + " current_q_total_items. Content:"
+                            + "\n"
+                            + repr(json))
+        else:
+            self.query_done = 0
+
         self.current_q_item_offset = current_q_item_offset
         self.current_q_total_items = current_q_total_items
-        
+
         if len(symbols) == 0:
             self.current_page_retries += 1
             # Related to issue #4
@@ -189,13 +159,13 @@ class SymbolDownloader:
                 self.query_done = self.query_done + self.query_done_max
         else:
             self.current_page_retries = 0
-            
+
         if(self.query_done >= self.query_done_max):
             if self._getQueryIndex() + 1 >= len(self.queries):
                 self.done = True
             else:
                 self.done = False
-        
+
         return symbols
 
     def isDone(self):

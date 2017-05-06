@@ -32,7 +32,7 @@ From source:
 
 Example Usage
 ---------------------
-        
+
 .. code::
 
     usage: YahooTickerDownloader.py [-h] [-i] [-e] [-E EXCHANGE] [-s SLEEP] [-p]
@@ -98,9 +98,9 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
-* Version 1.0.1-dev (????-??-??)
+* Version 2.0.0 (2017-05-05)
 
-  * Higher version
+  * Switched over to JSON api
 
 * Version 1.0.0 (2017-04-04)
 
@@ -130,7 +130,7 @@ Changelog
 
   * Workaround for #7 : downloading interruption
   * Solution for #9 : UnicodeEncodeError
-  
+
 * Version 0.7.0 (2016-03-20)
 
   * Added --export option. It will transcode the .pickle file immediately to the desired output formats.
