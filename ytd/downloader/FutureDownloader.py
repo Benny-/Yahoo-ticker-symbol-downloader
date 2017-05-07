@@ -15,7 +15,7 @@ class FutureDownloader(SymbolDownloader):
             ticker = text(row['symbol'])
             name = row['companyName']
             exchange = row['exchange']
-            symbols.append(Currency(ticker, name, exchange))
+            symbols.append(Future(ticker, name, exchange))
 
         if ('F' in json['data']['hits']):
             count = int(json['data']['hits']['F']['count'])

@@ -15,7 +15,7 @@ class ETFDownloader(SymbolDownloader):
             ticker = text(row['symbol'])
             name = row['companyName']
             exchange = row['exchange']
-            symbols.append(Currency(ticker, name, exchange))
+            symbols.append(ETF(ticker, name, exchange))
 
         if ('E' in json['data']['hits']):
             count = int(json['data']['hits']['E']['count'])

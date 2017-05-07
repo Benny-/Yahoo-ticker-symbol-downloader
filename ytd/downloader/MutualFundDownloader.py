@@ -15,7 +15,7 @@ class MutualFundDownloader(SymbolDownloader):
             ticker = text(row['symbol'])
             name = row['companyName']
             exchange = row['exchange']
-            symbols.append(Currency(ticker, name, exchange))
+            symbols.append(MutualFund(ticker, name, exchange))
 
         if ('M' in json['data']['hits']):
             count = int(json['data']['hits']['M']['count'])

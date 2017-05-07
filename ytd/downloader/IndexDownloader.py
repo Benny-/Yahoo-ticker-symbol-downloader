@@ -15,7 +15,7 @@ class IndexDownloader(SymbolDownloader):
             ticker = text(row['symbol'])
             name = row['companyName']
             exchange = row['exchange']
-            symbols.append(Currency(ticker, name, exchange))
+            symbols.append(Index(ticker, name, exchange))
 
         if ('I' in json['data']['hits']):
             count = int(json['data']['hits']['I']['count'])
