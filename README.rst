@@ -36,24 +36,29 @@ Example Usage
 .. code::
 
     usage: YahooTickerDownloader.py [-h] [-i] [-e] [-E EXCHANGE] [-s SLEEP] [-p]
+                                    [-m MARKET]
                                     type
 
     positional arguments:
-      type                  The type to download, this can be: mutualfund index
-                            bond etf warrant stocks future currency
+      type                  The type to download, this can be: future mutualfund
+                        etf stocks index currency
 
     optional arguments:
       -h, --help            show this help message and exit
       -i, --insecure        use HTTP instead of HTTPS
-      -e, --export          export immediately without downloading (Only useful
-                            if you already downloaded something to the .pickle
-                            file)
+      -e, --export          export immediately without downloading (Only useful if
+                            you already downloaded something to the .pickle file)
       -E EXCHANGE, --Exchange EXCHANGE
                             Only export ticker symbols from this exchange (the
                             filtering is done during the export phase)
       -s SLEEP, --sleep SLEEP
                             The time to sleep in seconds between requests
       -p, --pandantic       Stop and warn the user if some rare assertion fails
+      -m MARKET, --market MARKET
+                            Specify the Region of queried exchanges (us =
+                            USA+Canada, dr=Germany, fr=France, hk=Hongkong,
+                            gb=United Kingdom, default= all)
+
 
 The first positional argument must be one of the following: ``stocks`` ``etf``
 ``future`` ``index`` ``mutualfund`` ``currency`` ``warrant`` ``bond``
@@ -64,7 +69,8 @@ For example to download all stock symbols you run it like:
 
     YahooTickerDownloader.py stocks
 
-The program takes several days before it is finished.
+The program takes several hours before it is finished so if you don't need all symbols 
+it might be a good idea to specify the Region of the exchanges you're interested in.
 The program supports suspending and resuming a download.
 Press CTRL+C to suspend download. Restart the program
 in the same working directory to resume downloading.
