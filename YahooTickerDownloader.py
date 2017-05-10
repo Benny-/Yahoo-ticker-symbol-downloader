@@ -76,7 +76,7 @@ def main():
     parser.add_argument('type', help='The type to download, this can be: '+" ".join(list(options.keys())))
     parser.add_argument("-s", "--sleep", help="The time to sleep in seconds between requests", type=float, default=0)
     parser.add_argument("-p", "--pandantic", help="Stop and warn the user if some rare assertion fails", action="store_true")
-    parser.add_argument("-m", "--market", help="Specify the Region of queried exchanges (us = USA+Canada, dr=Germany, fr=France, hk=Hongkong, gb=United Kingdom, default= all", default="all")
+    parser.add_argument("-m", "--market", help="Specify the Region of queried exchanges (us = USA+Canada, dr=Germany, fr=France, hk=Hongkong, gb=United Kingdom, default= all)", default="all")
 
     args = parser.parse_args()
 
