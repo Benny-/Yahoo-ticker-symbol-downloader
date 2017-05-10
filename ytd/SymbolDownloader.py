@@ -25,7 +25,6 @@ class SymbolDownloader:
         self.query_done_max = 3
         self.current_page_retries = 0
         self.done = False
-        self.market = 'all'
 
     def _add_queries(self, prefix=''):
         # This method will add (prefix+)a...z to self.queries
