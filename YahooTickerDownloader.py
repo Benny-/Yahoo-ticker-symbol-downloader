@@ -38,12 +38,12 @@ def saveDownloader(downloader, tickerType):
         pickle.dump(downloader, file=f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def downloadEverything(downloader, tickerType, insecure, sleeptime, pandantic):
+def downloadEverything(downloader, tickerType, insecure, sleeptime, pandantic, market):
 
     loop = 0
     while not downloader.isDone():
 
-        symbols = downloader.nextRequest(insecure, pandantic)
+        symbols = downloader.nextRequest(insecure, pandantic, market)
         print("Got " + str(len(symbols)) + " downloaded " + downloader.type + " symbols:")
         if(len(symbols) > 2):
             try:
@@ -76,6 +76,8 @@ def main():
     parser.add_argument('type', help='The type to download, this can be: '+" ".join(list(options.keys())))
     parser.add_argument("-s", "--sleep", help="The time to sleep in seconds between requests", type=float, default=0)
     parser.add_argument("-p", "--pandantic", help="Stop and warn the user if some rare assertion fails", action="store_true")
+    parser.add_argument("-m", "--market", help="Specify the Region of queried exchanges (us = USA+Canada, dr=Germany, fr=France, hk=Hongkong, gb=United Kingdom, default= all)", default="all")
+
     args = parser.parse_args()
 
     if args.insecure:
@@ -85,6 +87,8 @@ def main():
         print("Exporting pickle file")
 
     tickerType = args.type = args.type.lower()
+
+    market = args.market = args.market.lower()
 
     print("Checking if we can resume a old download session")
     try:
@@ -104,7 +108,7 @@ def main():
             if not downloader.isDone():
                 print("Downloading " + downloader.type)
                 print("")
-                downloadEverything(downloader, tickerType, args.insecure, args.sleep, args.pandantic)
+                downloadEverything(downloader, tickerType, args.insecure, args.sleep, args.pandantic, market)
                 print ("Saving downloader to disk...")
                 saveDownloader(downloader, tickerType)
                 print ("Downloader successfully saved.")
