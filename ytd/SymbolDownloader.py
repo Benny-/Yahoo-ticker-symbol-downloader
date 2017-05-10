@@ -25,6 +25,7 @@ class SymbolDownloader:
         self.query_done_max = 3
         self.current_page_retries = 0
         self.done = False
+        self.market = 'all'
 
     def _add_queries(self, prefix=''):
         # This method will add (prefix+)a...z to self.queries
@@ -40,8 +41,9 @@ class SymbolDownloader:
             encoded += ';' + quote(key) + '=' + quote(text(value))
         return encoded
 
-    def _fetch(self, insecure):
+    def _fetch(self, insecure, market):
         params = {
+            'm': market,
             'b': text(self.current_q_item_offset),
             's': self.current_q,
             't': self.type[0].upper(),
@@ -88,7 +90,7 @@ class SymbolDownloader:
         else:
             self.current_q = self.queries[self._getQueryIndex() + 1]
 
-    def nextRequest(self, insecure=False, pandantic=False):
+    def nextRequest(self, insecure=False, pandantic=False, market='all'):
 
         # You would expect query_done to be a boolean.
         # But unfortunaly we can't depend on Yahoo telling use if there
@@ -105,7 +107,7 @@ class SymbolDownloader:
         # respectively.
         while(success == False):
             try:
-                json = self._fetch(insecure)
+                json = self._fetch(insecure, market)
                 success = True
             except (requests.HTTPError,
                     requests.exceptions.ChunkedEncodingError,
