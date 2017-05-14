@@ -132,7 +132,7 @@ class SymbolDownloader:
         current_q_total_items = count
 
         if(current_q_item_offset == current_q_total_items):
-            self.query_done = self.query_done + 1
+            self.query_done += 1
         elif(current_q_item_offset > current_q_total_items and pandantic):
             # This should never happen now that we are using the a JSON API
             raise Exception("Funny things are happening: current_q_item_offset "
