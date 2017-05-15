@@ -104,6 +104,10 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
+* Version 2.1.1-dev (xxxx-xx-xx)
+
+  * ???
+
 * Version 2.1.0 (2017-05-10)
 
   * Added market parameter ( pull request #33 )
