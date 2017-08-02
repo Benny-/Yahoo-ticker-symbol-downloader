@@ -104,9 +104,9 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
-* Version 2.1.1-dev (xxxx-xx-xx)
+* Version 2.1.1 (2017-08-02)
 
-  * ???
+  * A too old requests dependency was listed ( #35 )
 
 * Version 2.1.0 (2017-05-10)
 
