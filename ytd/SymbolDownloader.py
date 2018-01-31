@@ -6,6 +6,8 @@ import math
 from ytd.compat import text
 from ytd.compat import quote
 
+user_agent = 'yahoo-ticker-symbol-downloader'
+
 class SymbolDownloader:
     """Abstract class"""
 
@@ -53,10 +55,9 @@ class SymbolDownloader:
             'returnMeta': 'true',
         }
         protocol = 'http' if insecure else 'https'
-        user_agent = {'User-agent': 'yahoo-ticker-symbol-downloader'}
         req = requests.Request('GET',
             protocol+'://finance.yahoo.com/_finance_doubledown/api/resource/finance.yfinlist.symbol_lookup'+self._encodeParams(params),
-            headers=user_agent,
+            headers={'User-agent': user_agent},
             params=query_string
         )
         req = req.prepare()

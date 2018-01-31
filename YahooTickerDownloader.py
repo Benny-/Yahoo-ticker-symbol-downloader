@@ -5,6 +5,7 @@ from time import sleep
 import argparse
 import io
 
+from ytd import SymbolDownloader
 from ytd.downloader.StockDownloader import StockDownloader
 from ytd.downloader.ETFDownloader import ETFDownloader
 from ytd.downloader.FutureDownloader import FutureDownloader
@@ -13,10 +14,13 @@ from ytd.downloader.MutualFundDownloader import MutualFundDownloader
 from ytd.downloader.CurrencyDownloader import CurrencyDownloader
 from ytd.compat import text
 from ytd.compat import csv
+from reppy.robots import Robots
 
 import tablib
 
 import sys
+
+user_agent = SymbolDownloader.user_agent
 
 options = {
     "stocks": StockDownloader(),
@@ -80,6 +84,7 @@ def main():
 
     args = parser.parse_args()
 
+    protocol = 'http' if args.insecure else 'https'
     if args.insecure:
         print("Using insecure connection")
 
@@ -103,8 +108,14 @@ def main():
         else:
             downloader = options[tickerType]
 
+    robots = Robots.fetch(protocol + '://finance.yahoo.com/robots.txt')
     try:
         if not args.export:
+            
+            if(not robots.allowed(protocol + '://finance.yahoo.com/_finance_doubledown/api/resource/finance.yfinlist.symbol_lookup', user_agent)):
+                print("Robots.txt prevented downloading of stocks")
+                return 1
+            
             if not downloader.isDone():
                 print("Downloading " + downloader.type)
                 print("")

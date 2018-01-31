@@ -18,6 +18,7 @@ setup(
         "requests >= 2.4.3",
         "tablib >= 0.9.11",
         "backports.csv >= 1.0.4",
+        "reppy >= 0.4.9",
     ],
     classifiers=[
         "Operating System :: OS Independent",
