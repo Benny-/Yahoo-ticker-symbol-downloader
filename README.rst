@@ -104,6 +104,11 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
+* Version 2.2.0 (2018-01-31)
+
+  * Continue exporting to different formats if one export fails ( #41 )
+  * Check robots.txt ( anti-feature )
+
 * Version 2.1.1 (2017-08-02)
 
   * A too old requests dependency was listed ( #35 )

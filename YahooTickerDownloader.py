@@ -113,7 +113,7 @@ def main():
         if not args.export:
             
             if(not robots.allowed(protocol + '://finance.yahoo.com/_finance_doubledown/api/resource/finance.yfinlist.symbol_lookup', user_agent)):
-                print("Robots.txt prevented downloading of stocks")
+                print("Robots.txt prevented downloading")
                 return 1
             
             if not downloader.isDone():
