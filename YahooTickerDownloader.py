@@ -159,14 +159,23 @@ def main():
                 row = [text(y) if not y is None else u"" for y in data[i]]
                 writer.writerow(row)
 
-        with open(downloader.type + '.xlsx', 'wb') as f:
-            f.write(data.xlsx)
+        try:
+            with open(downloader.type + '.xlsx', 'wb') as f:
+                f.write(data.xlsx)
+        except:
+            print("Could not export .xlsx due to a internal error")
 
-        with open(downloader.type + '.json', 'wb') as f:
-            f.write(data.json.encode('UTF-8'))
+        try:
+            with open(downloader.type + '.json', 'wb') as f:
+                f.write(data.json.encode('UTF-8'))
+        except:
+            print("Could not export .json due to a internal error")
 
-        with open(downloader.type + '.yaml', 'wb') as f:
-            f.write(data.yaml.encode('UTF-8'))
+        try:
+            with open(downloader.type + '.yaml', 'wb') as f:
+                f.write(data.yaml.encode('UTF-8'))
+        except:
+            print("Could not export .yaml due to a internal error")
 
 if __name__ == "__main__":
     main()
