@@ -29,6 +29,7 @@ options = {
     "index": IndexDownloader(),
     "mutualfund": MutualFundDownloader(),
     "currency": CurrencyDownloader(),
+    "generic": GenericSymbolDownloader()
 }
 
 
