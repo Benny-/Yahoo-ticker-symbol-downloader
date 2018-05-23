@@ -1,4 +1,4 @@
-from ..SymbolDownloader import SymbolDownloader
+from ..SimpleSymbolDownloader import SymbolDownloader
 from ..symbols.Generic import Generic
 
 from ..compat import text
