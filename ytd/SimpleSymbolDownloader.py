@@ -7,7 +7,8 @@ from ytd.compat import text
 from ytd.compat import quote
 
 user_agent = 'yahoo-ticker-symbol-downloader'
-search_characters = 'abcdefghijklmnopqrstuvwxyz0123456789.='
+general_search_characters = 'abcdefghijklmnopqrstuvwxyz0123456789.='
+first_search_characters = 'abcdefghijklmnopqrstuvwxyz'
 
 class SymbolDownloader:
     """Abstract class"""
@@ -26,6 +27,12 @@ class SymbolDownloader:
 
     def _add_queries(self, prefix=''):
         # This method will add (prefix+)a...z to self.queries
+        # This API requires the first character of the search to be a letter.
+        # The second character can be a letter, number, dot, or equals sign.
+        if len(prefix)==0:
+            search_characters = first_search_characters
+        else:
+            search_characters = general_search_characters
 
         for i in range(len(search_characters)):
             element = str(prefix) + str(search_characters[i])
@@ -48,7 +55,7 @@ class SymbolDownloader:
         }
         protocol = 'http' if insecure else 'https'
         req = requests.Request('GET',
-            protocol+'://finance.yahoo.com/_finance_doubledown/api/resource/searchassist;'+self._encodeParams(params),
+            protocol+'://finance.yahoo.com/_finance_doubledown/api/resource/searchassist'+self._encodeParams(params),
             headers={'User-agent': user_agent},
             params=query_string
         )

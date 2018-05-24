@@ -6,12 +6,14 @@ import argparse
 import io
 
 from ytd import SymbolDownloader
+from ytd import SimpleSymbolDownloader
 from ytd.downloader.StockDownloader import StockDownloader
 from ytd.downloader.ETFDownloader import ETFDownloader
 from ytd.downloader.FutureDownloader import FutureDownloader
 from ytd.downloader.IndexDownloader import IndexDownloader
 from ytd.downloader.MutualFundDownloader import MutualFundDownloader
 from ytd.downloader.CurrencyDownloader import CurrencyDownloader
+from ytd.downloader.GenericDownloader import GenericDownloader
 from ytd.compat import text
 from ytd.compat import csv
 from reppy.robots import Robots
@@ -29,7 +31,7 @@ options = {
     "index": IndexDownloader(),
     "mutualfund": MutualFundDownloader(),
     "currency": CurrencyDownloader(),
-    "generic": GenericSymbolDownloader()
+    "generic": GenericDownloader()
 }
 
 
