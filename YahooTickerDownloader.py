@@ -5,14 +5,7 @@ from time import sleep
 import argparse
 import io
 
-from ytd import SymbolDownloader
 from ytd import SimpleSymbolDownloader
-from ytd.downloader.StockDownloader import StockDownloader
-from ytd.downloader.ETFDownloader import ETFDownloader
-from ytd.downloader.FutureDownloader import FutureDownloader
-from ytd.downloader.IndexDownloader import IndexDownloader
-from ytd.downloader.MutualFundDownloader import MutualFundDownloader
-from ytd.downloader.CurrencyDownloader import CurrencyDownloader
 from ytd.downloader.GenericDownloader import GenericDownloader
 from ytd.compat import text
 from ytd.compat import csv
@@ -22,15 +15,9 @@ import tablib
 
 import sys
 
-user_agent = SymbolDownloader.user_agent
+user_agent = SimpleSymbolDownloader.user_agent
 
 options = {
-    "stocks": StockDownloader(),
-    "etf": ETFDownloader(),
-    "future": FutureDownloader(),
-    "index": IndexDownloader(),
-    "mutualfund": MutualFundDownloader(),
-    "currency": CurrencyDownloader(),
     "generic": GenericDownloader()
 }
 
@@ -45,12 +32,12 @@ def saveDownloader(downloader, tickerType):
         pickle.dump(downloader, file=f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def downloadEverything(downloader, tickerType, insecure, sleeptime, pandantic, market):
+def downloadEverything(downloader, tickerType, insecure, sleeptime, pandantic):
 
     loop = 0
     while not downloader.isDone():
 
-        symbols = downloader.nextRequest(insecure, pandantic, market)
+        symbols = downloader.nextRequest(insecure, pandantic)
         print("Got " + str(len(symbols)) + " downloaded " + downloader.type + " symbols:")
         if(len(symbols) > 2):
             try:
@@ -80,10 +67,9 @@ def main():
     parser.add_argument("-i", "--insecure", help="use HTTP instead of HTTPS", action="store_true")
     parser.add_argument("-e", "--export", help="export immediately without downloading (Only useful if you already downloaded something to the .pickle file)", action="store_true")
     parser.add_argument('-E', '--Exchange', help='Only export ticker symbols from this exchange (the filtering is done during the export phase)')
-    parser.add_argument('type', help='The type to download, this can be: '+" ".join(list(options.keys())))
+    parser.add_argument('type', nargs='?', default='generic', help='The type to download, this can be: '+" ".join(list(options.keys())))
     parser.add_argument("-s", "--sleep", help="The time to sleep in seconds between requests", type=float, default=0)
     parser.add_argument("-p", "--pandantic", help="Stop and warn the user if some rare assertion fails", action="store_true")
-    parser.add_argument("-m", "--market", help="Specify the Region of queried exchanges (us = USA+Canada, dr=Germany, fr=France, hk=Hongkong, gb=United Kingdom, default= all)", default="all")
 
     args = parser.parse_args()
 
@@ -95,8 +81,6 @@ def main():
         print("Exporting pickle file")
 
     tickerType = args.type = args.type.lower()
-
-    market = args.market = args.market.lower()
 
     print("Checking if we can resume a old download session")
     try:
@@ -111,18 +95,19 @@ def main():
         else:
             downloader = options[tickerType]
 
-    robots = Robots.fetch(protocol + '://finance.yahoo.com/robots.txt')
+    robotsUrl = protocol + '://finance.yahoo.com/robots.txt'
+    robots = Robots.fetch(robotsUrl)
     try:
         if not args.export:
             
-            if(not robots.allowed(protocol + '://finance.yahoo.com/_finance_doubledown/api/resource/finance.yfinlist.symbol_lookup', user_agent)):
-                print("Robots.txt prevented downloading")
+            if(not robots.allowed(protocol + '://finance.yahoo.com/_finance_doubledown/api/resource/searchassist', user_agent)):
+                print('Execution of script halted due to ' + robotsUrl)
                 return 1
             
             if not downloader.isDone():
                 print("Downloading " + downloader.type)
                 print("")
-                downloadEverything(downloader, tickerType, args.insecure, args.sleep, args.pandantic, market)
+                downloadEverything(downloader, tickerType, args.insecure, args.sleep, args.pandantic)
                 print ("Saving downloader to disk...")
                 saveDownloader(downloader, tickerType)
                 print ("Downloader successfully saved.")

@@ -4,11 +4,10 @@ Yahoo ticker downloader
 Produces .csv, .xlsx, .json and .yaml files (All files contain same data but in a
 different format) for stocks, ETF, futures, indexes, mutual funds, currency,
 warrants and bonds. The ticker symbol, company name and exchange are saved for
-all symbols. The stock symbols also have a category name.
+all symbols.
 
 It gets its data from `https://finance.yahoo.com/lookup/`_. Please note: it
 is not possible to get all the symbols due to limitations set by Yahoo.
-About 75%-90% of all symbols are gathered using this script depending on type.
 
 Requirements
 ---------------------
@@ -37,11 +36,10 @@ Example Usage
 
     usage: YahooTickerDownloader.py [-h] [-i] [-e] [-E EXCHANGE] [-s SLEEP] [-p]
                                     [-m MARKET]
-                                    type
+                                    [type]
 
     positional arguments:
-      type                  The type to download, this can be: future mutualfund
-                        etf stocks index currency
+      type                  The type to download, this can be: generic
 
     optional arguments:
       -h, --help            show this help message and exit
@@ -58,7 +56,6 @@ Example Usage
                             Specify the Region of queried exchanges (us =
                             USA+Canada, dr=Germany, fr=France, hk=Hongkong,
                             gb=United Kingdom, default= all)
-
 
 The first positional argument must be one of the following: ``stocks`` ``etf``
 ``future`` ``index`` ``mutualfund`` ``currency`` ``warrant`` ``bond``
@@ -103,6 +100,10 @@ Download history for symbols: ystockquote_
 
 Changelog
 ---------------------
+
+* Version 3.0.0
+
+  * Switched over to different JSON api (searchassist)
 
 * Version 2.2.0 (2018-01-31)
 

@@ -45,7 +45,7 @@ class SymbolDownloader:
             encoded += ';' + quote(key) + '=' + quote(text(value))
         return encoded
 
-    def _fetch(self, insecure, market):
+    def _fetch(self, insecure):
         params = {
             'searchTerm': self.current_q,
         }
@@ -81,26 +81,27 @@ class SymbolDownloader:
         else:
             self.current_q = self.queries[self._getQueryIndex() + 1]
 
-    def nextRequest(self, insecure=False, pandantic=False, market='all'):
+    def nextRequest(self, insecure=False, pandantic=False):
         self._nextQuery()
         success = False
         retryCount = 0
         json = None
         # Eponential back-off algorithm
-        # to attempt 3 more times sleeping 5, 25, 125 seconds
+        # to attempt 5 more times sleeping 5, 25, 125, 625, 3125 seconds
         # respectively.
+        maxRetries = 5
         while(success == False):
             try:
-                json = self._fetch(insecure, market)
+                json = self._fetch(insecure)
                 success = True
             except (requests.HTTPError,
                     requests.exceptions.ChunkedEncodingError,
                     requests.exceptions.ReadTimeout,
                     requests.exceptions.ConnectionError) as ex:
-                if retryCount < 3:
+                if retryCount < maxRetries:
                     attempt = retryCount + 1
                     sleepAmt = int(math.pow(5,attempt))
-                    print("Retry attempt: " + str(attempt) + "."
+                    print("Retry attempt: " + str(attempt) + " of " + str(maxRetries) + "."
                         " Sleep period: " + str(sleepAmt) + " seconds."
                         )
                     sleep(sleepAmt)
