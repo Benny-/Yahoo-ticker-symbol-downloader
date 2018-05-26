@@ -35,7 +35,6 @@ Example Usage
 .. code::
 
     usage: YahooTickerDownloader.py [-h] [-i] [-e] [-E EXCHANGE] [-s SLEEP] [-p]
-                                    [-m MARKET]
                                     [type]
 
     positional arguments:
@@ -52,10 +51,6 @@ Example Usage
       -s SLEEP, --sleep SLEEP
                             The time to sleep in seconds between requests
       -p, --pandantic       Stop and warn the user if some rare assertion fails
-      -m MARKET, --market MARKET
-                            Specify the Region of queried exchanges (us =
-                            USA+Canada, dr=Germany, fr=France, hk=Hongkong,
-                            gb=United Kingdom, default= all)
 
 The first positional argument must be one of the following: ``stocks`` ``etf``
 ``future`` ``index`` ``mutualfund`` ``currency`` ``warrant`` ``bond``
