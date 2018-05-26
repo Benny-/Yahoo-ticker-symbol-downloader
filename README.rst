@@ -72,17 +72,16 @@ Example of CSV output:
 
 .. code::
 
-    Ticker,Name,Exchange,categoryName,categoryNr
-    ENZ,"Enzo Biochem Inc.",NYQ,"Medical Laboratories & Research",525
-    ENZN,"Enzon Pharmaceuticals Inc.",NMS,Biotechnology,515
-    ENZR,"Energizer Resources Inc.",PNK,,0
-    EOAA.DE,"E.ON AG",GER,"Diversified Utilities",913
-    KMX,"CarMax Inc.",NYQ,"Auto Dealerships",744
-    KMY.MU,KIMBERLY-CLARK,MUN,"Personal Products",323
-    KN1.DU,ECOUNION,DUS,"Business Software & Services",826
-    KNCAY,"Konica Minolta Holdings Inc.",PNK,,0
-    KND,"Kindred Healthcare Inc.",NYQ,"Long-Term Care Facilities",523
-    KNDI,"Kandi Technologies, Corp",NGM,"Auto Manufacturers - Major",330
+    Ticker	Name	Exchange	exchangeDisplay	Type	TypeDisplay
+    JNUG	Direxion Daily Jr Gld Mnrs Bull 3X ETF	ASE	NYSE MKT	E	ETF
+    DWDP	DowDuPont Inc.	NYQ	NYSE	S	Equity
+    E	Eni S.p.A.	NYQ	NYSE	S	Equity
+    EQH	AXA Equitable Holdings, Inc.	NYS	NYSE	S	Equity
+    XOM	Exxon Mobil Corporation	NYQ	NYSE	S	Equity
+    ETP	Energy Transfer Partners, L.P.	NYQ	NYSE	S	Equity
+    ES=F	E-mini S&P 500 Index Futures,Jufuture	CME	Chicago Mercantile Exchange	F	Futures
+    NQ=F	E-mini Nasdaq 100 Index Futuresfuture	CME	Chicago Mercantile Exchange	F	Futures
+    GE=F	Eurodollar Futures,Sep-2018future	CME	Chicago Mercantile Exchange	F	Futures
     ...ect
 
 Depending on the type you are downloading, you will get between 3.000 and 100.000+
@@ -96,7 +95,7 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
-* Version 3.0.0
+* Version 3.0.0 (2018-05-27)
 
   * Switched over to different JSON api (searchassist)
 
