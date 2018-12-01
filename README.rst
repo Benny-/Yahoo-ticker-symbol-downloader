@@ -91,6 +91,10 @@ Download history for symbols: ystockquote_
 Changelog
 ---------------------
 
+* Version 3.0.1 (2018-12-01)
+
+  * Removed reppy dependency
+
 * Version 3.0.0 (2018-05-27)
 
   * Switched over to different JSON api (searchassist)

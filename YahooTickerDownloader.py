@@ -9,7 +9,7 @@ from ytd import SimpleSymbolDownloader
 from ytd.downloader.GenericDownloader import GenericDownloader
 from ytd.compat import text
 from ytd.compat import csv
-from reppy.robots import Robots
+from ytd.compat import robotparser
 
 import tablib
 
@@ -95,13 +95,14 @@ def main():
         else:
             downloader = options[tickerType]
 
-    robotsUrl = protocol + '://finance.yahoo.com/robots.txt'
-    robots = Robots.fetch(robotsUrl)
+    rp = robotparser.RobotFileParser()
+    rp.set_url(protocol + '://finance.yahoo.com/robots.txt')
+    rp.read()
     try:
         if not args.export:
             
-            if(not robots.allowed(protocol + '://finance.yahoo.com/_finance_doubledown/api/resource/searchassist', user_agent)):
-                print('Execution of script halted due to ' + robotsUrl)
+            if(not rp.can_fetch(user_agent, protocol + '://finance.yahoo.com/_finance_doubledown/api/resource/searchassist')):
+                print('Execution of script halted due to robots.txt')
                 return 1
             
             if not downloader.isDone():
