@@ -52,21 +52,17 @@ Example Usage
                             The time to sleep in seconds between requests
       -p, --pandantic       Stop and warn the user if some rare assertion fails
 
-The first positional argument must be one of the following: ``stocks`` ``etf``
-``future`` ``index`` ``mutualfund`` ``currency`` ``warrant`` ``bond``
-
 For example to download all stock symbols you run it like:
 
 .. code:: bash
 
-    YahooTickerDownloader.py stocks
+    YahooTickerDownloader.py
 
-The program takes several hours before it is finished so if you don't need all symbols 
-it might be a good idea to specify the Region of the exchanges you're interested in.
+The program takes a few weeks before it is finished.
 The program supports suspending and resuming a download.
 Press CTRL+C to suspend download. Restart the program
 in the same working directory to resume downloading.
-It is possible to export a partially downloaded results using the -e flag.
+It is possible to export partially downloaded results using the -e flag.
 
 Example of CSV output:
 
